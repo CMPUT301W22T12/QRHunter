@@ -19,6 +19,7 @@ import com.example.qrhunter.databinding.ActivityMapsBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -30,6 +31,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.util.Log;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -41,7 +43,6 @@ import javax.annotation.Nullable;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     FirebaseFirestore db;
-    final CollectionReference collectionReference = db.collection("QRHunter");
     private GoogleMap map;
     private ActivityMapsBinding binding;
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
@@ -81,6 +82,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         map = googleMap;
 
         db = FirebaseFirestore.getInstance();
+        final CollectionReference collectionReference = db.collection("QRHunter");
         collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable
@@ -89,16 +91,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
 
         // Clear the old list
-        markers.clear();
-        for(QueryDocumentSnapshot doc: queryDocumentSnapshots)
-        {
-            Log.d(TAG, String.valueOf((double) doc.getData().get("Latitude")));
-            String data = doc.getId();
-            double latitude = (double) doc.getData().get("Latitude");
-            double altitude = (double) doc.getData().get("Altitude");
-            double score = (double) doc.getData().get("Score");
-            markers.add(new location(latitude, altitude, score));
-        }
+        collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable
+                    FirebaseFirestoreException error) {
+                if (error != null) {
+                    Toast.makeText(MapsActivity.this, "error in firebase" + error, Toast.LENGTH_SHORT).show();
+                    return; // exit after handling error
+                }
+                markers.clear();
+                for(DocumentSnapshot doc: queryDocumentSnapshots)
+                {
+                    double latitude = Double.parseDouble(doc.getString("Latitude"));
+                    double altitude = Double.parseDouble(doc.getString("Altitude"));
+                    double score = Double.parseDouble(doc.getString("Score"));
+                    markers.add(new location(latitude, altitude, score));
+                }
+            }
+        });
 
         for(int i = 0; i < markers.size(); i++){
             location marker = markers.get(i);
