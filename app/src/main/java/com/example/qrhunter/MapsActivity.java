@@ -41,7 +41,7 @@ import javax.annotation.Nullable;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     FirebaseFirestore db;
-    final CollectionReference collectionReference = db.collection("QRcode");
+    final CollectionReference collectionReference = db.collection("QRHunter");
     private GoogleMap map;
     private ActivityMapsBinding binding;
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
