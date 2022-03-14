@@ -14,6 +14,7 @@ import androidx.lifecycle.LifecycleOwner;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,11 +28,10 @@ import com.google.common.util.concurrent.ListenableFuture;
 import java.util.concurrent.ExecutionException;
 
 /**
- * Activity for running and managing the camera
- * Code for checking and requesting Camera Permissions referenced from: https://stackoverflow.com/questions/22400984/how-to-comment-androids-activities-with-javadoc
- *
+ * Activity for running and managing the camera used to scan QR Codes
+ * Code for camera usage and qr scanning referenced from: https://learntodroid.com/how-to-create-a-qr-code-scanner-app-in-android/
  */
-public class CameraActivity extends AppCompatActivity {
+public class qrScanCameraActivity extends AppCompatActivity {
     private static final int PERMISSION_REQUEST_CAMERA = 0;
 
     private PreviewView cameraPreviewView;
@@ -53,8 +53,11 @@ public class CameraActivity extends AppCompatActivity {
             // onClick function for the QR Code Found Button
             @Override
             public void onClick(View view){
-                Toast.makeText(getApplicationContext(), qrCode, Toast.LENGTH_SHORT).show();
-                Log.i(CameraActivity.class.getSimpleName(), "QR Code Found: " + qrCode);
+                Log.i(qrScanCameraActivity.class.getSimpleName(), "QR Code Found: " + qrCode);
+                Intent qrScannedIntent = new Intent(qrScanCameraActivity.this, qrScannedGetInfoActivity.class);
+                qrScannedIntent.putExtra("QR_Content", qrCode);
+                qrScannedIntent.putExtra("entryFromScanBool", true);
+                startActivity(qrScannedIntent);
             }
         });
 
@@ -70,12 +73,11 @@ public class CameraActivity extends AppCompatActivity {
             startCamera();
         }else{
             if(ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)){
-                ActivityCompat.requestPermissions(CameraActivity.this, new String[]{Manifest.permission.CAMERA}, PERMISSION_REQUEST_CAMERA);
+                ActivityCompat.requestPermissions(qrScanCameraActivity.this, new String[]{Manifest.permission.CAMERA}, PERMISSION_REQUEST_CAMERA);
             }else{
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, PERMISSION_REQUEST_CAMERA);
             }
         }
-
     }
 
     @SuppressLint("MissingSuperCall") //Do not need the super method call unless dealing with fragments
