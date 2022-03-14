@@ -3,7 +3,6 @@ package com.example.qrhunter;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.graphics.Camera;
 import android.os.Bundle;
 import android.view.View;
 
@@ -16,7 +15,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void switchActivity(View view) {
-        Intent switchActivityIntent = new Intent(this, CameraActivity.class);
+        Intent switchActivityIntent = new Intent(this, qrScanCameraActivity.class);
         startActivity(switchActivityIntent);
     }
 }

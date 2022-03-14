@@ -27,7 +27,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".CameraActivity"
+            android:name=".qrAddObjectPictureActivity"
+            android:exported="false" />
+        <activity
+            android:name=".qrScannedGetInfoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".qrScanCameraActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

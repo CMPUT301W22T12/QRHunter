@@ -5,10 +5,12 @@ import android.graphics.BitmapFactory;
 
 import android.graphics.Matrix;
 
+import android.media.ExifInterface;
 import android.media.Image;
 
 import androidx.annotation.NonNull;
 
+import java.io.IOException;
 import java.nio.ByteBuffer;
 
 public class imageHandler {
