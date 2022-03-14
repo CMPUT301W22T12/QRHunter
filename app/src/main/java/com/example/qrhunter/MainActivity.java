@@ -6,6 +6,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import com.example.qrhunter.Login;
+import com.google.firebase.auth.FirebaseAuth;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -14,8 +17,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 
-    public void switchActivity(View view) {
-        Intent switchActivityIntent = new Intent(this, qrScanCameraActivity.class);
-        startActivity(switchActivityIntent);
+    public void Logout(View view) {
+        FirebaseAuth.getInstance().signOut();
+        startActivity(new Intent(getApplicationContext(), Login.class));
+        finish();
+    }
+
+    public void scanNewCodeButton(View view){
+        Intent scanNewCodeIntent = new Intent(MainActivity.this, qrScanCameraActivity.class);
+        startActivity(scanNewCodeIntent);
     }
 }
