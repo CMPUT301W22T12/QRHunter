@@ -45,4 +45,5 @@ dependencies {
 
     //Zebra Crossing Dependencies
     implementation 'com.journeyapps:zxing-android-embedded:4.2.0'
+
 }

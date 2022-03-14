@@ -4,14 +4,14 @@ import java.security.MessageDigest;
 
 public class ScoringHandler {
 
-    public ScoringHandler scoringHandler(){
+    public ScoringHandler() {
 
-    };
+    }
 
-    public static int score(char hex, int count){
+    public int score(char hex, int count) {
         //convert the char into its hex value then
         //use the amount of consecutive duplicates to calculate score.
-        int base = 0;
+        int base;
         switch (hex) {
             case '0':
                 base = 20;
@@ -66,49 +66,59 @@ public class ScoringHandler {
                 //ignore characters that are not 0-9 or a-f.
         }
 
-        int charScore = (int)Math.pow(base, count);
+        int charScore = (int) Math.pow(base, count);
         return charScore;
     }
 
-    /*
-    Call this function to look through a hexadecimal representation of the sha256
+    /**
+     * Call this function to look through a hexadecimal representation of the sha256
+     * @param str
+     * @return
      */
-    public static int hexString(String str) {
+    public int hexStringReader(String str) {
         //function to count the amount of repeating characters in a string
         int finalScore = 0;
         int repeating = 0; //int for consecutive occurrences
         int i = 0;
         for (i = 0; i < str.length(); i++) {
             char current = str.charAt(i);
-            if (i+1 < str.length()) {
-                if (current == str.charAt(i+1)) {
-                    repeating ++;
-                }
-                else if (current != str.charAt(i+1) && repeating > 0){
+            if (i + 1 < str.length()) {
+                if (current == str.charAt(i + 1)) {
+                    repeating++;
+                } else if (current != str.charAt(i + 1) && repeating > 0) {
                     finalScore = finalScore + score(current, repeating);
                     repeating = 0;
                 }
             }
         }
         //this part makes sure that we count the final character
-        if (repeating > 0){
-            char last = str.charAt(i-1);
+        if (repeating > 0) {
+            char last = str.charAt(i - 1);
             finalScore = finalScore + score(last, repeating);
         }
         return finalScore;
     }
 
-    public static String sha256(String stringText) {
-        try{
+    /**
+     * @param stringText
+     * @return
+     */
+    public String sha256(String stringText) {
+        try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
-            byte[] hash = md.digest(base.);
-
-        }
-        catch (Exception ex) {
+            byte[] mdbytes = md.digest(stringText.getBytes("UTF-8"));
+            StringBuilder stringBuild = new StringBuilder();
+            for (int i = 0; i < mdbytes.length; i++) {
+                String hexString = Integer.toHexString(0xff & mdbytes[i]);
+                if (hexString.length() == 1) {
+                    stringBuild.append('0');
+                }
+                stringBuild.append(hexString);
+            }
+            return stringBuild.toString();
+        } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
 
     }
-
-
 }

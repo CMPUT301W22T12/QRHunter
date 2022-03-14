@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Jadon/AndroidStudioProjects/QRHunterApp/app/src/main/res/layout/activity_login.xml" value="0.40520833333333334" />
         <entry key="..\:/Users/Jadon/AndroidStudioProjects/QRHunterApp/app/src/main/res/layout/activity_qr_add_object_picture.xml" value="0.4192708333333333" />
         <entry key="..\:/Users/Jadon/AndroidStudioProjects/QRHunterApp/app/src/main/res/layout/activity_qr_scanned_get_info.xml" value="0.67" />
       </map>

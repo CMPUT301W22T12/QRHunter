@@ -37,6 +37,10 @@ public class qrScannedGetInfoActivity extends AppCompatActivity {
         qrContent = extras.getString("QR_Content");
         boolean comeFromScan = extras.getBoolean("entryFromScanBool");
 
+        ScoringHandler scoringHandler = new ScoringHandler();
+        String shaString = scoringHandler.sha256(qrContent);
+        int score = scoringHandler.hexStringReader(shaString);
+
         if(comeFromScan){
             objectImageView.setVisibility(View.INVISIBLE);
             //When coming from a fresh scan ensure that the cache image file is empty
@@ -55,7 +59,7 @@ public class qrScannedGetInfoActivity extends AppCompatActivity {
             objectImageView.setVisibility(View.VISIBLE);
         }
 
-        pointsText.setText(qrContent);
+        pointsText.setText("Your QR Code has scored you " + score + " points!");
     }
 
     /**
