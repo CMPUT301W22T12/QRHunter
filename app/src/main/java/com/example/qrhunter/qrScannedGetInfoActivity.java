@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,7 +21,8 @@ import java.io.File;
 public class qrScannedGetInfoActivity extends AppCompatActivity {
     String qrContent;
     String objectImagePath;
-
+    Bitmap objectImage;
+    Boolean includeImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +30,7 @@ public class qrScannedGetInfoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_qr_scanned_get_info);
         //retrieve variables for view entities
         TextView pointsText = findViewById(R.id.qrScanned_pointValueTextView);
-        ImageView objectImage = findViewById(R.id.getInfo_objectImageView);
+        ImageView objectImageView = findViewById(R.id.getInfo_objectImageView);
 
         //retrieve content from Intent
         Bundle extras = getIntent().getExtras();
@@ -36,7 +38,7 @@ public class qrScannedGetInfoActivity extends AppCompatActivity {
         boolean comeFromScan = extras.getBoolean("entryFromScanBool");
 
         if(comeFromScan){
-            objectImage.setVisibility(View.INVISIBLE);
+            objectImageView.setVisibility(View.INVISIBLE);
             //When coming from a fresh scan ensure that the cache image file is empty
             File imageCacheFile = new File(getCacheDir().getAbsolutePath(), "objectImageFile.jpg");
             if(imageCacheFile.exists()){
@@ -44,11 +46,13 @@ public class qrScannedGetInfoActivity extends AppCompatActivity {
             }
         }
         if(extras.containsKey("imagePath")){
+            includeImage = true;
             objectImagePath = extras.getString("imagePath");
             Log.i(qrScannedGetInfoActivity.class.getSimpleName(), "path received: " + objectImagePath);
             Bitmap bitmapImage = BitmapFactory.decodeFile(objectImagePath);
-            objectImage.setImageBitmap(bitmapImage);
-            objectImage.setVisibility(View.VISIBLE);
+            objectImage = bitmapImage;
+            objectImageView.setImageBitmap(bitmapImage);
+            objectImageView.setVisibility(View.VISIBLE);
         }
 
         pointsText.setText(qrContent);
@@ -63,6 +67,31 @@ public class qrScannedGetInfoActivity extends AppCompatActivity {
         Intent addObjectImageIntent = new Intent(qrScannedGetInfoActivity.this, qrAddObjectPictureActivity.class);
         addObjectImageIntent.putExtra("QR_Content", qrContent);
         startActivity(addObjectImageIntent);
+    }
+
+    /**
+     * Button onclick function for the submission of scanned code
+     * Put's all required information into the database
+     * @param v current view
+     */
+    public void submitQRCodeButton(View v){
+        CheckBox addLocationCheckbox = findViewById(R.id.addLocationOnCodeCheckbox);
+        String commentText;
+        Intent submitQRCodeIntent = new Intent();
+        //add location to QR Code entry database
+        if(addLocationCheckbox.isChecked()){
+
+        }
+        TextView commentTextBox = findViewById(R.id.commentOnNewCodeTextEdit);
+        //add new comment to database linked to this QR Code
+        if(commentTextBox.toString().equals("")){
+            commentText = commentTextBox.toString();
+            submitQRCodeIntent.putExtra("commentString", commentText);
+        }
+        //Add Image of object to QR Code entry in Database
+        if(includeImage){
+
+        }
     }
 
 
