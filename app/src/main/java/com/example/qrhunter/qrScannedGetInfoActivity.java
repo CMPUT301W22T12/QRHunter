@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
@@ -24,6 +25,7 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -105,80 +107,42 @@ public class qrScannedGetInfoActivity extends AppCompatActivity {
      * @param v current view
      */
     public void submitQRCodeButton(View v) throws FileNotFoundException {
+        String commentId = "";
+        String imagePath = "";
+        String photoRefLocation;
 
-        boolean scannedBefore = ifQRScannedBefore(shaString);
+        qrDatabaseAddHandler qrDatabaseHandler = new qrDatabaseAddHandler();
         //If the user took a picture to include
         if(includeImage){
-            StorageReference storageRef = storage.getReference();
-            SimpleDateFormat s = new SimpleDateFormat("ddMMyyyyhhmmss");
-            String format = s.format(new Date());
-            StorageReference photoRef = storageRef.child("images/" + shaString + "/" + format + ".jpg");
-            InputStream stream = new FileInputStream(new File(objectImagePath));
-            photoRef.putStream(stream);
+            Log.i(TAG, "Include Image");
+            photoRefLocation = qrDatabaseHandler.addImageToStorage(shaString, storage, objectImagePath);
+            imagePath = "gs://qrhunter-38915.appspot.com/" + photoRefLocation;
         }
         //If the user made a comment
         String commentText;
         TextView commentTextBox = findViewById(R.id.commentOnNewCodeTextEdit);
-        final String[] commentId = new String[0];
-        Boolean isComment = !commentTextBox.toString().equals("");
-        if(isComment){
-            commentText = commentTextBox.toString();
-            Map<String, Object> commentData = new HashMap<>();
-            commentData.put("Text", commentText);
-            commentData.put("QRcode", shaString);
-            commentData.put("User", "INSERT USERNAME HERE");
-            db.collection("Comments").add(commentData).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                @Override
-                public void onSuccess(DocumentReference documentReference) {
-                    commentId[0] = documentReference.getId();
-                }
-            });
+        Boolean isComment = !commentTextBox.getText().toString().equals("");
+        if(isComment) {
+            Log.i(TAG, "IsComment");
+            commentText = commentTextBox.getText().toString();
+            commentId = qrDatabaseHandler.addCommentToDB(commentText, shaString, db);
         }
 
-        //if scanned before, just add details. Otherwise make new entry
-        DocumentReference qrRef = db.collection("QRcode").document(shaString);
-        if(scannedBefore){
-            qrRef.update("Users", FieldValue.arrayUnion("INSERT USERNAME HERE"));
-            if(isComment){ qrRef.update("Comments", "/Comments/" + commentId[0]); }
-            if(includeImage){ }
-        }else{
-            Map<String, Object> qrData = new HashMap<>();
-            qrData.put("Score", score);
-            qrData.put("Users", Arrays.asList("PLEASE INSERT USERNAME HERE"));
-            if(isComment){ qrData.put("Comments", Arrays.asList("/Comments/" + commentId[0])); }
-            db.collection("QRcode").document(shaString).set(qrData);
-        }
-        CheckBox addLocationCheckbox = findViewById(R.id.addLocationOnCodeCheckbox);
+        //add location data to QR Code if needed...
+        //Not yet implemented
+//        CheckBox addLocationCheckbox = findViewById(R.id.addLocationOnCodeCheckbox);
+//
+//        //add location to QR Code entry database
+//        if(addLocationCheckbox.isChecked()){
+//
+//        }
 
+        qrDatabaseHandler.addQRToDB(commentId, imagePath, score, shaString, db);
 
-        //add location to QR Code entry database
-        if(addLocationCheckbox.isChecked()){
-
-        }
 
         Intent backToMainIntent = new Intent(qrScannedGetInfoActivity.this, MainActivity.class);
         startActivity(backToMainIntent);
 
-    }
-
-    public boolean ifQRScannedBefore(String shaString){
-        //Check if this QR has been scanned before
-        final boolean[] scannedBefore = new boolean[1];
-        DocumentReference docRef = db.collection("QRcode").document(shaString);
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if(task.isSuccessful()){
-                    DocumentSnapshot document = task.getResult();
-                    if(document.exists()){
-                        scannedBefore[0] = true;
-                    }else{
-                        scannedBefore[0] = false;
-                    }
-                }
-            }
-        });
-        return scannedBefore[0];
     }
 
 
