@@ -1,11 +1,17 @@
 package com.example.qrhunter;
 
-import static android.content.ContentValues.TAG;
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.os.Bundle;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
-import android.content.Intent;
-import android.os.Bundle;
+import com.example.qrhunter.databinding.ActivityMapsBinding;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -13,29 +19,17 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.example.qrhunter.databinding.ActivityMapsBinding;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
-import android.location.Location;
-import android.util.Log;
-import android.widget.ArrayAdapter;
-import android.widget.Toast;
-
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import java.util.ArrayList;
 
 import javax.annotation.Nullable;
@@ -52,6 +46,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private UiSettings mUiSettings;
     private ArrayList<location> markers;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,6 +62,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         getLocationPermission();
     }
+
 
     /**
      * Manipulates the map once available.
@@ -100,8 +96,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     return; // exit after handling error
                 }
                 markers.clear();
-                for(DocumentSnapshot doc: queryDocumentSnapshots)
-                {
+                for (DocumentSnapshot doc : queryDocumentSnapshots) {
                     double latitude = Double.parseDouble(doc.getString("Latitude"));
                     double altitude = Double.parseDouble(doc.getString("Altitude"));
                     double score = Double.parseDouble(doc.getString("Score"));
@@ -110,7 +105,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
 
-        for(int i = 0; i < markers.size(); i++){
+
+        for (int i = 0; i < markers.size(); i++) {
             location marker = markers.get(i);
             double score = marker.getScore();
             LatLng QR = new LatLng(marker.getAltitude(), marker.getLatitude());
@@ -131,8 +127,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-
-
     /**
      * Call this function to get the current device location
      * @param
@@ -142,34 +136,29 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private void getDeviceLocation() {
 
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-
-        if (ActivityCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(
-                        this, Manifest.permission.ACCESS_COARSE_LOCATION)
-                        != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-        final Task location = mFusedLocationProviderClient.getLastLocation();
-        location.addOnCompleteListener(new OnCompleteListener() {
-            @Override
-            public void onComplete(@NonNull Task task) {
-                if (task.isSuccessful()) {
-                    Location currentL = (Location) task.getResult();
-                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentL.getLatitude(),
-                                    currentL.getLongitude()),
-                            15f));
-                }
-            }
-        });
-
+        mFusedLocationProviderClient.getLastLocation()
+                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        // Got last known location. In some rare situations this can be null.
+                        if (location != null) {
+                            map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(),
+                                    location.getLongitude()), 13));
+                            CameraPosition cameraPosition = new CameraPosition.Builder()
+                                    .target(new LatLng(location.getLatitude(), location.getLongitude()))      // Sets the center of the map to location user
+                                    .zoom(15)                   // Sets the zoom
+                                    .tilt(40)                   // Sets the tilt of the camera to 30 degrees
+                                    .build();                   // Creates a CameraPosition from the builder
+                            map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                        }
+                    }
+                });
     }
 
     /**
