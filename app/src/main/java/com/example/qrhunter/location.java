@@ -3,25 +3,25 @@ package com.example.qrhunter;
 
 public class location {
 
-    private double altitude;
+    private double longitude;
     private double latitude;
-    private double score;
+    private String score;
 
-    public location(double a, double l, double s){
-        altitude = a;
+    public location(double a, double l, String s){
+        longitude = a;
         latitude = l;
         score = s;
     }
 
-    public double getAltitude(){
-        return altitude;
+    public double getLongitude(){
+        return longitude;
     }
 
     public double getLatitude(){
         return latitude;
     }
 
-    public double getScore(){
+    public String getScore(){
         return score;
     }
 }
