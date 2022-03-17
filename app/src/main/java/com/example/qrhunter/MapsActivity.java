@@ -5,10 +5,12 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
+
 import com.example.qrhunter.databinding.ActivityMapsBinding;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -26,8 +28,11 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QuerySnapshot;
+
 import java.util.ArrayList;
+
 import javax.annotation.Nullable;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
@@ -41,8 +46,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Boolean locationPermissions = false;
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private UiSettings mUiSettings;
-
     ArrayList<location> markers;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,8 +60,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-        markers = new ArrayList<>();
-
         getLocationPermission();
     }
 
@@ -73,6 +76,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
+        markers = new ArrayList<>();
 
         db = FirebaseFirestore.getInstance();
         final CollectionReference collectionReference = db.collection("QRcode");
@@ -87,24 +91,26 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 markers.clear();
                 for (DocumentSnapshot doc : queryDocumentSnapshots) {
                     try {
-                        Double latitude = doc.getGeoPoint("Location").getLatitude();
-                        Double longitude = doc.getGeoPoint("Location").getLongitude();
-                        location lc = new location(latitude, longitude, "score");
-                        markers.add(lc);
+                        GeoPoint geo = doc.getGeoPoint("Location");
+                        Double latitude = geo.getLatitude();
+                        Double longitude = geo.getLongitude();
+                        location markerLocation = new location(latitude, longitude, "score");
+                        markers.add(markerLocation);
                     } catch (Exception exception) {
-                        Toast.makeText(MapsActivity.this, "error in firebase" + error, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MapsActivity.this, "Some QRcodes do not contain location" + error, Toast.LENGTH_SHORT).show();
                     }
+                }
+
+                map.addMarker(new MarkerOptions().position(new LatLng(53.2, -113.32)).title(String.valueOf(markers.size())));
+                for (int i = 0; i < markers.size(); i++) {
+                    location marker = markers.get(i);
+                    String score = marker.getScore();
+                    LatLng QR = new LatLng(marker.getLongitude(), marker.getLatitude());
+                    map.addMarker(new MarkerOptions().position(QR).title(score));
                 }
             }
         });
 
-        map.addMarker(new MarkerOptions().position(new LatLng(53.2, -113.32)).title(String.valueOf(markers.size())));
-        for (int i = 0; i < markers.size(); i++) {
-            location marker = markers.get(i);
-            String score = marker.getScore();
-            LatLng QR = new LatLng(marker.getLatitude(), marker.getLongitude());
-            map.addMarker(new MarkerOptions().position(QR).title(score));
-        }
 
         mUiSettings = map.getUiSettings();
         mUiSettings.setZoomControlsEnabled(true);
