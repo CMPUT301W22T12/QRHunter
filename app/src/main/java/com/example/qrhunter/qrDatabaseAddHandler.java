@@ -10,6 +10,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
@@ -72,6 +73,7 @@ public class qrDatabaseAddHandler {
         DocumentReference docRef = db.collection("QRcode").document(shaString);
         Log.i(TAG, "commentId = " + commentId);
         Log.i(TAG, "imagePath = " + imagePath);
+        Log.i(TAG, "User ID = " + FirebaseAuth.getInstance().getUid());
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -79,16 +81,17 @@ public class qrDatabaseAddHandler {
                     DocumentSnapshot document = task.getResult();
                     if(document.exists()){
                         docRef.update("Users", FieldValue.arrayUnion("INSERT USERNAME HERE"));
-                        if(commentId.length() > 0){ docRef.update("Comments", FieldValue.arrayUnion("/Comments/" + commentId)); }
+                        if(commentId.length() > 0){ docRef.update("Comments", FieldValue.arrayUnion(commentId)); }
                         if(imagePath.length() > 0){ docRef.update("Images", FieldValue.arrayUnion(imagePath)); }
                     }else{
                         Map<String, Object> qrData = new HashMap<>();
                         qrData.put("Score", score);
                         qrData.put("Users", Arrays.asList("PLEASE INSERT USERNAME HERE"));
-                        if(commentId.length() > 0){ qrData.put("Comments", Arrays.asList("Comments/" + commentId)); }
+                        if(commentId.length() > 0){ qrData.put("Comments", Arrays.asList(commentId)); }
                         if(imagePath.length() > 0){ qrData.put("Images", Arrays.asList(imagePath)); }
                         db.collection("QRcode").document(shaString).set(qrData);
                     }
+
                 }
             }
         });
