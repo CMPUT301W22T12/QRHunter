@@ -30,6 +30,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.maps.android.SphericalUtil;
 
 import java.util.ArrayList;
 
@@ -47,6 +48,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private UiSettings mUiSettings;
     ArrayList<location> markers;
+    private LatLng currentL;
 
 
     @Override
@@ -78,6 +80,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         map = googleMap;
         markers = new ArrayList<>();
 
+        mUiSettings = map.getUiSettings();
+        mUiSettings.setZoomControlsEnabled(true);
+
+        if (locationPermissions) {
+            getDeviceLocation();
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                    != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
+                    Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                return;
+            }
+            map.setMyLocationEnabled(true);
+        }
+
         db = FirebaseFirestore.getInstance();
         final CollectionReference collectionReference = db.collection("QRcode");
         // Clear the old list
@@ -94,36 +109,30 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         GeoPoint geo = doc.getGeoPoint("Location");
                         Double latitude = geo.getLatitude();
                         Double longitude = geo.getLongitude();
-                        location markerLocation = new location(latitude, longitude, "score");
+                        String score = String.valueOf(doc.getData().get("Score"));
+                        location markerLocation = new location(latitude, longitude, score);
                         markers.add(markerLocation);
                     } catch (Exception exception) {
                         Toast.makeText(MapsActivity.this, "Some QRcodes do not contain location" + error, Toast.LENGTH_SHORT).show();
                     }
                 }
 
-                map.addMarker(new MarkerOptions().position(new LatLng(53.2, -113.32)).title(String.valueOf(markers.size())));
                 for (int i = 0; i < markers.size(); i++) {
                     location marker = markers.get(i);
                     String score = marker.getScore();
                     LatLng QR = new LatLng(marker.getLongitude(), marker.getLatitude());
-                    map.addMarker(new MarkerOptions().position(QR).title(score));
+                    String distance = getDistance(QR, currentL);
+
+                    String info = "Score: " + score + " Distance: " + distance;
+                    map.addMarker(new MarkerOptions().position(QR).title(info));
                 }
             }
         });
+    }
 
-
-        mUiSettings = map.getUiSettings();
-        mUiSettings.setZoomControlsEnabled(true);
-
-        if (locationPermissions) {
-            getDeviceLocation();
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                    != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
-                    Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                return;
-            }
-            map.setMyLocationEnabled(true);
-        }
+    private String getDistance(LatLng a, LatLng b) {
+        double distance = SphericalUtil.computeDistanceBetween(a, b);
+        return String.format("%.2f", distance / 1000) + "km";
     }
 
     /**
@@ -147,6 +156,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     public void onSuccess(Location location) {
                         // Got last known location. In some rare situations this can be null.
                         if (location != null) {
+                            currentL = new LatLng(location.getLatitude(), location.getLongitude());
                             map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(),
                                     location.getLongitude()), 13));
                             CameraPosition cameraPosition = new CameraPosition.Builder()
