@@ -102,7 +102,18 @@ public class qrDatabaseAddHandler {
                         if(latitude != 0 && longitude != 0){ qrData.put("Location", new GeoPoint(latitude, longitude)); }
                         db.collection("QRcode").document(shaString).set(qrData);
                     }
+                    //add record of scan to user profile
 
+                    DocumentReference userDoc = db.collection("Users").document(user.getUid());
+                    userDoc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if(task.isSuccessful()){
+                                userDoc.update("QRcodes", FieldValue.arrayUnion(shaString));
+                                userDoc.update("totalScore", FieldValue.increment(score));
+                            }
+                        }
+                    });
                 }
             }
         });

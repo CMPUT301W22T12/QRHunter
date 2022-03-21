@@ -26,6 +26,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
@@ -39,6 +41,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
@@ -52,7 +55,7 @@ public class qrScannedGetInfoActivity extends AppCompatActivity {
     String qrContent;
     String objectImagePath;
     Bitmap objectImage;
-    Boolean includeImage;
+    Boolean includeImage = false;
     String shaString;
     int score;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -75,6 +78,24 @@ public class qrScannedGetInfoActivity extends AppCompatActivity {
         ScoringHandler scoringHandler = new ScoringHandler();
         shaString = scoringHandler.sha256(qrContent);
         score = scoringHandler.hexStringReader(shaString);
+
+        //check if user has scanned this code before
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        DocumentReference userDocRef = db.collection("Users").document(user.getUid());
+        Task<DocumentSnapshot> userDocTask = userDocRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                DocumentSnapshot userDoc = task.getResult();
+                ArrayList userQRs = (ArrayList) userDoc.get("QRcodes");
+                if(userQRs.contains(shaString)){
+                    Intent backToMainIntent = new Intent(qrScannedGetInfoActivity.this, MainActivity.class);
+                    startActivity(backToMainIntent);
+                    Toast.makeText(qrScannedGetInfoActivity.this, "You have already scanned this QR Code", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+            }
+        });
+
 
         if(comeFromScan){
             objectImageView.setVisibility(View.INVISIBLE);
