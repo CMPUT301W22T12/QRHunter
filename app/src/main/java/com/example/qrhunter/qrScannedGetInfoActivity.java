@@ -4,16 +4,23 @@ import static android.content.ContentValues.TAG;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -110,14 +117,52 @@ public class qrScannedGetInfoActivity extends AppCompatActivity {
         String commentId = "";
         String imagePath = "";
         String photoRefLocation;
+        String qrCodeId = shaString;
 
         qrDatabaseAddHandler qrDatabaseHandler = new qrDatabaseAddHandler();
+
+        CheckBox addLocationCheckbox = findViewById(R.id.addLocationOnCodeCheckbox);
+        //add location to QR Code entry database
+        double latitude = 0.0;
+        double longitude = 0.0;
+        if(addLocationCheckbox.isChecked()){
+            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_NETWORK_STATE}, 1);
+            Location gps_loc = null, network_loc = null, final_loc;
+            LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                    && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                    && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_NETWORK_STATE) != PackageManager.PERMISSION_GRANTED) {
+                return;
+            }
+
+            try {
+
+                gps_loc = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                network_loc = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            if (gps_loc != null) {
+                final_loc = gps_loc;
+                latitude = final_loc.getLatitude();
+                longitude = final_loc.getLongitude();
+            }
+            else if (network_loc != null) {
+                final_loc = network_loc;
+                latitude = final_loc.getLatitude();
+                longitude = final_loc.getLongitude();
+            }
+        }
+
         //If the user took a picture to include
         if(includeImage){
             Log.i(TAG, "Include Image");
             photoRefLocation = qrDatabaseHandler.addImageToStorage(shaString, storage, objectImagePath);
             imagePath = "gs://qrhunter-38915.appspot.com/" + photoRefLocation;
         }
+
         //If the user made a comment
         String commentText;
         TextView commentTextBox = findViewById(R.id.commentOnNewCodeTextEdit);
@@ -128,21 +173,13 @@ public class qrScannedGetInfoActivity extends AppCompatActivity {
             commentId = qrDatabaseHandler.addCommentToDB(commentText, shaString, db);
         }
 
-        //add location data to QR Code if needed...
-        //Not yet implemented
-//        CheckBox addLocationCheckbox = findViewById(R.id.addLocationOnCodeCheckbox);
-//
-//        //add location to QR Code entry database
-//        if(addLocationCheckbox.isChecked()){
-//
-//        }
-
-        qrDatabaseHandler.addQRToDB(commentId, imagePath, score, shaString, db);
+        qrDatabaseHandler.addQRToDB(commentId, imagePath, score, latitude, longitude, shaString, db);
 
 
         Intent backToMainIntent = new Intent(qrScannedGetInfoActivity.this, MainActivity.class);
         startActivity(backToMainIntent);
-
+        Toast.makeText(this, "QR Code Submitted!", Toast.LENGTH_SHORT).show();
+        finish();
     }
 
 
