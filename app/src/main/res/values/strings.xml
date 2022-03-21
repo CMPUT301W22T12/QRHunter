@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">QRHunter</string>
+    <string name="take_picture">Take Picture</string>
+    <string name="submit_new_code">Submit this QR Code</string>
+    <string name="add_location_checkbox">Include Current Location Data</string>
+    <string name="add_comment_text">Add a Comment:</string>
+    <string name="title_activity_maps">MapsActivity</string>
+    <string name="google_map_api_key">AIzaSyDko96kHfAO0ffQGIqro0dmp4lsEn2i1MY</string>
+</resources>

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".qrScannedGetInfoActivity">
+
+    <TextView
+        android:id="@+id/qrScanned_pointValueTextView"
+        android:layout_width="358dp"
+        android:layout_height="23dp"
+        android:layout_marginTop="32dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="36dp"
+        android:onClick="addImageButton"
+        android:text="@string/take_picture"
+        app:layout_constraintBottom_toBottomOf="@+id/getInfo_objectImageView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/getInfo_objectImageView"
+        app:layout_constraintTop_toTopOf="@+id/getInfo_objectImageView" />
+
+    <ImageView
+        android:id="@+id/getInfo_objectImageView"
+        android:layout_width="191dp"
+        android:layout_height="252dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/qrScanned_pointValueTextView"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:onClick="submitQRCodeButton"
+        android:text="@string/submit_new_code"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <CheckBox
+        android:id="@+id/addLocationOnCodeCheckbox"
+        android:layout_width="328dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="24dp"
+        android:text="@string/add_location_checkbox"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/getInfo_objectImageView" />
+
+    <EditText
+        android:id="@+id/commentOnNewCodeTextEdit"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="32dp"
+        android:ems="10"
+        android:gravity="start|top"
+        android:inputType="textMultiLine"
+        app:layout_constraintBottom_toTopOf="@+id/button3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/addCommentTextView" />
+
+    <TextView
+        android:id="@+id/addCommentTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/add_comment_text"
+        app:layout_constraintStart_toStartOf="@+id/commentOnNewCodeTextEdit"
+        app:layout_constraintTop_toBottomOf="@+id/addLocationOnCodeCheckbox" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
