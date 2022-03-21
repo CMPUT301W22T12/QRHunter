@@ -2,10 +2,14 @@ package com.example.qrhunter;
 
 import static android.content.ContentValues.TAG;
 
+import android.content.Context;
+import android.location.Location;
+import android.location.LocationManager;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -16,6 +20,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -29,6 +34,8 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+import kotlin.jvm.internal.LocalVariableReference;
 
 public class qrDatabaseAddHandler {
 
@@ -71,7 +78,7 @@ public class qrDatabaseAddHandler {
         return commentId;
     }
 
-    public void addQRToDB(String commentId, String imagePath, int score, String shaString, FirebaseFirestore db){
+    public void addQRToDB(String commentId, String imagePath, int score, double latitude, double longitude, String shaString, FirebaseFirestore db){
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         DocumentReference docRef = db.collection("QRcode").document(shaString);
         Log.i(TAG, "commentId = " + commentId);
@@ -92,11 +99,14 @@ public class qrDatabaseAddHandler {
                         qrData.put("Users", Arrays.asList(user.getUid()));
                         if(commentId.length() > 0){ qrData.put("Comments", Arrays.asList(commentId)); }
                         if(imagePath.length() > 0){ qrData.put("Images", Arrays.asList(imagePath)); }
+                        if(latitude != 0 && longitude != 0){ qrData.put("Location", new GeoPoint(latitude, longitude)); }
                         db.collection("QRcode").document(shaString).set(qrData);
                     }
 
                 }
             }
         });
+        return;
     }
+
 }
