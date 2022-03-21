@@ -27,4 +27,9 @@ public class MainActivity extends AppCompatActivity {
         Intent scanNewCodeIntent = new Intent(MainActivity.this, qrScanCameraActivity.class);
         startActivity(scanNewCodeIntent);
     }
+
+    public void openMapButton(View view){
+        Intent openMapIntent = new Intent(MainActivity.this, MapsActivity.class);
+        startActivity(openMapIntent);
+    }
 }

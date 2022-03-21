@@ -28,7 +28,9 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.maps.android.SphericalUtil;
 
 import java.util.ArrayList;
 
@@ -45,7 +47,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Boolean locationPermissions = false;
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private UiSettings mUiSettings;
-    private ArrayList<location> markers;
+    ArrayList<location> markers;
+    private LatLng currentL;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,8 +62,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-        markers = new ArrayList<>();
-
         getLocationPermission();
     }
 
@@ -76,42 +78,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
-
-        db = FirebaseFirestore.getInstance();
-        final CollectionReference collectionReference = db.collection("QRHunter");
-        collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable
-                    FirebaseFirestoreException error) {
-            }
-        });
-
-        // Clear the old list
-        collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable
-                    FirebaseFirestoreException error) {
-                if (error != null) {
-                    Toast.makeText(MapsActivity.this, "error in firebase" + error, Toast.LENGTH_SHORT).show();
-                    return; // exit after handling error
-                }
-                markers.clear();
-                for (DocumentSnapshot doc : queryDocumentSnapshots) {
-                    double latitude = Double.parseDouble(doc.getString("Latitude"));
-                    double altitude = Double.parseDouble(doc.getString("Altitude"));
-                    double score = Double.parseDouble(doc.getString("Score"));
-                    markers.add(new location(latitude, altitude, score));
-                }
-            }
-        });
-
-
-        for (int i = 0; i < markers.size(); i++) {
-            location marker = markers.get(i);
-            double score = marker.getScore();
-            LatLng QR = new LatLng(marker.getAltitude(), marker.getLatitude());
-            map.addMarker(new MarkerOptions().position(QR).title(String.valueOf(score)));
-        }
+        markers = new ArrayList<>();
 
         mUiSettings = map.getUiSettings();
         mUiSettings.setZoomControlsEnabled(true);
@@ -125,6 +92,47 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
             map.setMyLocationEnabled(true);
         }
+
+        db = FirebaseFirestore.getInstance();
+        final CollectionReference collectionReference = db.collection("QRcode");
+        // Clear the old list
+        collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable
+                    FirebaseFirestoreException error) {
+                if (error != null) {
+                    Toast.makeText(MapsActivity.this, "error in firebase" + error, Toast.LENGTH_SHORT).show();
+                }
+                markers.clear();
+                for (DocumentSnapshot doc : queryDocumentSnapshots) {
+                    try {
+                        GeoPoint geo = doc.getGeoPoint("Location");
+                        Double latitude = geo.getLatitude();
+                        Double longitude = geo.getLongitude();
+                        String score = String.valueOf(doc.getData().get("Score"));
+                        location markerLocation = new location(latitude, longitude, score);
+                        markers.add(markerLocation);
+                    } catch (Exception exception) {
+                        Toast.makeText(MapsActivity.this, "Some QRcodes do not contain location" + error, Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                for (int i = 0; i < markers.size(); i++) {
+                    location marker = markers.get(i);
+                    String score = marker.getScore();
+                    LatLng QR = new LatLng(marker.getLongitude(), marker.getLatitude());
+                    String distance = getDistance(QR, currentL);
+
+                    String info = "Score: " + score + " Distance: " + distance;
+                    map.addMarker(new MarkerOptions().position(QR).title(info));
+                }
+            }
+        });
+    }
+
+    private String getDistance(LatLng a, LatLng b) {
+        double distance = SphericalUtil.computeDistanceBetween(a, b);
+        return String.format("%.2f", distance / 1000) + "km";
     }
 
     /**
@@ -148,12 +156,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     public void onSuccess(Location location) {
                         // Got last known location. In some rare situations this can be null.
                         if (location != null) {
+                            currentL = new LatLng(location.getLatitude(), location.getLongitude());
                             map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(),
                                     location.getLongitude()), 13));
                             CameraPosition cameraPosition = new CameraPosition.Builder()
                                     .target(new LatLng(location.getLatitude(), location.getLongitude()))      // Sets the center of the map to location user
                                     .zoom(15)                   // Sets the zoom
-                                    .tilt(40)                   // Sets the tilt of the camera to 30 degrees
                                     .build();                   // Creates a CameraPosition from the builder
                             map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
                         }

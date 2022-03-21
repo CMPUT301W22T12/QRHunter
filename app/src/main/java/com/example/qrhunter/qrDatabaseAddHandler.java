@@ -11,6 +11,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
@@ -57,11 +58,12 @@ public class qrDatabaseAddHandler {
     }
 
     public String addCommentToDB(String commentText, String shaString, FirebaseFirestore db){
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         Map<String, Object> commentData = new HashMap<>();
         commentData.put("Text", commentText);
         commentData.put("QRcode", shaString);
-        commentData.put("User", "INSERT USERNAME HERE");
-        String uid = "GETUSERID";
+        commentData.put("User", user.getUid());
+        String uid = user.getUid();
         SimpleDateFormat s = new SimpleDateFormat("ddMMyyyyhhmmss");
         String format = s.format(new Date());
         String commentId = "C-" + uid + "-" + format;
@@ -70,6 +72,7 @@ public class qrDatabaseAddHandler {
     }
 
     public void addQRToDB(String commentId, String imagePath, int score, String shaString, FirebaseFirestore db){
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         DocumentReference docRef = db.collection("QRcode").document(shaString);
         Log.i(TAG, "commentId = " + commentId);
         Log.i(TAG, "imagePath = " + imagePath);
@@ -80,13 +83,13 @@ public class qrDatabaseAddHandler {
                 if(task.isSuccessful()){
                     DocumentSnapshot document = task.getResult();
                     if(document.exists()){
-                        docRef.update("Users", FieldValue.arrayUnion("INSERT USERNAME HERE"));
+                        docRef.update("Users", FieldValue.arrayUnion(user.getUid()));
                         if(commentId.length() > 0){ docRef.update("Comments", FieldValue.arrayUnion(commentId)); }
                         if(imagePath.length() > 0){ docRef.update("Images", FieldValue.arrayUnion(imagePath)); }
                     }else{
                         Map<String, Object> qrData = new HashMap<>();
                         qrData.put("Score", score);
-                        qrData.put("Users", Arrays.asList("PLEASE INSERT USERNAME HERE"));
+                        qrData.put("Users", Arrays.asList(user.getUid()));
                         if(commentId.length() > 0){ qrData.put("Comments", Arrays.asList(commentId)); }
                         if(imagePath.length() > 0){ qrData.put("Images", Arrays.asList(imagePath)); }
                         db.collection("QRcode").document(shaString).set(qrData);
