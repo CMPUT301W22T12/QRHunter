@@ -32,9 +32,6 @@
             android:value="@string/google_map_api_key" />
 
         <activity
-            android:name=".Login"
-            android:exported="false" />
-        <activity
             android:name=".Register"
             android:exported="true" />
         <activity

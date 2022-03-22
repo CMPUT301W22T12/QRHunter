@@ -11,7 +11,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
@@ -81,7 +80,7 @@ public class qrDatabaseAddHandler {
         DocumentReference docRef = db.collection("QRcode").document(shaString);
         Log.i(TAG, "commentId = " + commentId);
         Log.i(TAG, "imagePath = " + imagePath);
-        Log.i(TAG, "User ID = " + FirebaseAuth.getInstance().getUid());
+        Log.i(TAG, "User ID = " + username);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
