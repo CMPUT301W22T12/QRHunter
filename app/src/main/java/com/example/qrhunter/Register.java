@@ -18,22 +18,24 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
-import java.util.Map;
 
 public class Register extends AppCompatActivity {
 
-    EditText FirstName, LastName, Email, Password,Phone;
+    EditText Username, PlayerName, Email,Phone;
     Button register;
     TextView loginPrompt;
-    FirebaseAuth fAuth;
     FirebaseFirestore fstore;
-    String userID;
 
 
     @Override
@@ -41,71 +43,39 @@ public class Register extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        FirstName = findViewById(R.id.editTextTextPersonName);
-        LastName = findViewById(R.id.editTextTextPersonName2);
+        Username = findViewById(R.id.editTextUsernameText);
+        PlayerName = findViewById(R.id.editTextPersonName);
         Email = findViewById(R.id.editTextTextEmailAddress);
-        Password = findViewById(R.id.editTextTextPersonName3);
         Phone = findViewById(R.id.editTextPhone);
         register = findViewById(R.id.register_button);
-        loginPrompt = findViewById(R.id.textView3);
+        loginPrompt = findViewById(R.id.alreadyRegisteredLoginText);
 
-        fAuth = FirebaseAuth.getInstance();
         fstore = FirebaseFirestore.getInstance();
 
-        if(fAuth.getCurrentUser() != null){
-            startActivity(new Intent(getApplicationContext(), MainActivity.class));
-            finish();
-        }
 
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String email = Email.getText().toString().trim();
-                String password = Password.getText().toString().trim();
-                String fName = FirstName.getText().toString().trim();
-                String lName = LastName.getText().toString().trim();
+                String username = Username.getText().toString().trim();
+                String playerName = PlayerName.getText().toString().trim();
                 String Pno = Phone.getText().toString().trim();
+                Log.i(TAG, "username: " + username);
 
-                if(TextUtils.isEmpty(email)){
-                    Email.setError("Email is required");
+                if(TextUtils.isEmpty(username)){
+                    Username.setError("Email is required");
                     return;
                 }
 
-                if(TextUtils.isEmpty(password)){
-                    Password.setError("Password is required");
-                    return;
-                }
-
-                if(password.length() < 6){
-                    Password.setError("Password must be at least 6 characters long");
-                    return;
-                }
-
-                fAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                DocumentReference docRef = fstore.collection("Users").document(username);
+                docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()){
-                            Toast.makeText(Register.this, "User registration successful", Toast.LENGTH_SHORT).show();
-                            userID = fAuth.getCurrentUser().getUid();
-                            DocumentReference document = fstore.collection("Users").document(userID);
-
-                            Map <String, Object> user = new HashMap<>();
-                            user.put("fName", fName);
-                            user.put("LName", lName);
-                            user.put("PhoneNo", Pno);
-                            user.put("Email", email);
-
-                            document.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void unused) {
-                                    Log.d(TAG, "OnSuccess: User profile is created for "+ userID);
-                                }
-                            });
-                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                        }
-                        else{
-                            Toast.makeText(Register.this, "Error!" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if(!task.getResult().exists()){
+                            addUserToDatabase(username, email, playerName, Pno);
+                        }else{
+                            Username.setError("Username Taken");
+                            return;
                         }
                     }
                 });
@@ -115,7 +85,42 @@ public class Register extends AppCompatActivity {
         loginPrompt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), Login.class));
+                startActivity(new Intent(getApplicationContext(), LoginScreenActivity.class));
+            }
+        });
+    }
+
+    public void addUserToDatabase(String username, String email, String playerName, String phoneNum){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        HashMap<String, Object> userInfo = new HashMap<>();
+        userInfo.put("Username", username);
+        userInfo.put("Email", email);
+        userInfo.put("Name", playerName);
+        userInfo.put("PhoneNum", phoneNum);
+        userInfo.put("totalScore", 0);
+        userInfo.put("QRcodes", FieldValue.arrayUnion());
+        db.collection("Users").document(username).set(userInfo).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                Toast.makeText(Register.this, "Account Created!", Toast.LENGTH_SHORT).show();
+                File userInfoFile = new File(getFilesDir(), "userInfo");
+                FileOutputStream userInfoStream = null;
+                try {
+                    userInfoStream = new FileOutputStream(userInfoFile);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    userInfoStream.write(username.getBytes(StandardCharsets.UTF_8));
+                    userInfoStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                userInfoFile.setReadOnly();
+                Intent goToMainActivityIntent = new Intent(Register.this, MainActivity.class);
+                startActivity(goToMainActivityIntent);
+                finish();
             }
         });
     }

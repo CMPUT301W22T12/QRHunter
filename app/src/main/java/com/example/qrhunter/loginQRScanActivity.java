@@ -28,10 +28,10 @@ import com.google.common.util.concurrent.ListenableFuture;
 import java.util.concurrent.ExecutionException;
 
 /**
- * Activity for running and managing the camera used to scan QR Codes
+ * Activity for running and managing the camera used to scan QR Codes for logging in
  * Code for camera usage and qr scanning referenced from: https://learntodroid.com/how-to-create-a-qr-code-scanner-app-in-android/
  */
-public class qrScanCameraActivity extends AppCompatActivity {
+public class loginQRScanActivity extends AppCompatActivity {
     private static final int PERMISSION_REQUEST_CAMERA = 0;
 
     private PreviewView cameraPreviewView;
@@ -54,9 +54,8 @@ public class qrScanCameraActivity extends AppCompatActivity {
             @Override
             public void onClick(View view){
                 Log.i(qrScanCameraActivity.class.getSimpleName(), "QR Code Found: " + qrCode);
-                Intent qrScannedIntent = new Intent(qrScanCameraActivity.this, qrScannedGetInfoActivity.class);
+                Intent qrScannedIntent = new Intent(loginQRScanActivity.this, LoginScreenActivity.class);
                 qrScannedIntent.putExtra("QR_Content", qrCode);
-                qrScannedIntent.putExtra("entryFromScanBool", true);
                 startActivity(qrScannedIntent);
             }
         });
@@ -73,7 +72,7 @@ public class qrScanCameraActivity extends AppCompatActivity {
             startCamera();
         }else{
             if(ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)){
-                ActivityCompat.requestPermissions(qrScanCameraActivity.this, new String[]{Manifest.permission.CAMERA}, PERMISSION_REQUEST_CAMERA);
+                ActivityCompat.requestPermissions(loginQRScanActivity.this, new String[]{Manifest.permission.CAMERA}, PERMISSION_REQUEST_CAMERA);
             }else{
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, PERMISSION_REQUEST_CAMERA);
             }
@@ -146,4 +145,3 @@ public class qrScanCameraActivity extends AppCompatActivity {
     }
 
 }
-

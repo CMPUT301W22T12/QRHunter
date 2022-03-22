@@ -23,29 +23,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.text.SimpleDateFormat;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+
 
 /**
  * Activity for getting all required information on a newly scanned QR Code
@@ -57,7 +45,9 @@ public class qrScannedGetInfoActivity extends AppCompatActivity {
     Bitmap objectImage;
     Boolean includeImage = false;
     String shaString;
+    String username;
     int score;
+
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     FirebaseStorage storage = FirebaseStorage.getInstance();
 
@@ -68,6 +58,13 @@ public class qrScannedGetInfoActivity extends AppCompatActivity {
         //retrieve variables for view entities
         TextView pointsText = findViewById(R.id.qrScanned_pointValueTextView);
         ImageView objectImageView = findViewById(R.id.getInfo_objectImageView);
+
+        userHandler userHand = new userHandler();
+        try {
+            username = userHand.getUsername(this);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         //retrieve content from Intent
         Bundle extras = getIntent().getExtras();
@@ -80,8 +77,7 @@ public class qrScannedGetInfoActivity extends AppCompatActivity {
         score = scoringHandler.hexStringReader(shaString);
 
         //check if user has scanned this code before
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        DocumentReference userDocRef = db.collection("Users").document(user.getUid());
+        DocumentReference userDocRef = db.collection("Users").document(username);
         Task<DocumentSnapshot> userDocTask = userDocRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -140,7 +136,12 @@ public class qrScannedGetInfoActivity extends AppCompatActivity {
         String photoRefLocation;
         String qrCodeId = shaString;
 
-        qrDatabaseAddHandler qrDatabaseHandler = new qrDatabaseAddHandler();
+        qrDatabaseAddHandler qrDatabaseHandler = null;
+        try {
+            qrDatabaseHandler = new qrDatabaseAddHandler(this);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         CheckBox addLocationCheckbox = findViewById(R.id.addLocationOnCodeCheckbox);
         //add location to QR Code entry database
@@ -203,6 +204,9 @@ public class qrScannedGetInfoActivity extends AppCompatActivity {
         finish();
     }
 
-
+    @Override
+    public void onBackPressed() {
+        finish();
+    }
 
 }

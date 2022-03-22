@@ -183,4 +183,8 @@ public class qrAddObjectPictureActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onBackPressed() {
+        finish();
+    }
 }
