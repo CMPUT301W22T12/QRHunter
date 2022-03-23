@@ -62,6 +62,12 @@ public class MainActivity extends AppCompatActivity {
         startActivity(openLoginQRIntent);
     }
 
+    public void testQRViewButton(View view){
+        Intent testQRViewerIntent = new Intent(MainActivity.this, QRcodeViewerActivity.class);
+        testQRViewerIntent.putExtra("QRcode", "a78b4976f797ad00bca8bee0acf8b0ff7f78e1565b423bad794aa733ee265f6c");
+        startActivity(testQRViewerIntent);
+    }
+
     @Override
     public void onBackPressed() {
         new AlertDialog.Builder(this)

@@ -105,4 +105,13 @@
         app:layout_constraintTop_toBottomOf="@+id/search"
         android:onClick="Logout"/>
 
+    <Button
+        android:id="@+id/testButtonIgnore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="testQRViewButton"
+        android:text="Test"
+        app:layout_constraintTop_toBottomOf="@+id/logout"
+        tools:layout_editor_absoluteX="159dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
