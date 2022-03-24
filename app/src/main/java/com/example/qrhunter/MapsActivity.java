@@ -7,9 +7,9 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.FragmentActivity;
 
 import com.example.qrhunter.databinding.ActivityMapsBinding;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -36,7 +36,7 @@ import java.util.ArrayList;
 
 import javax.annotation.Nullable;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     FirebaseFirestore db;
     private GoogleMap map;
@@ -63,6 +63,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         getLocationPermission();
+
+
     }
 
 
@@ -82,6 +84,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         mUiSettings = map.getUiSettings();
         mUiSettings.setZoomControlsEnabled(true);
+
 
         if (locationPermissions) {
             getDeviceLocation();
