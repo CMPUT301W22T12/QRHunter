@@ -1,12 +1,12 @@
 package com.example.qrhunter;
 
-public class location {
+public class locations {
 
     private double longitude;
     private double latitude;
     private String score;
 
-    public location(double a, double l, String s){
+    public locations(double a, double l, String s){
         longitude = a;
         latitude = l;
         score = s;

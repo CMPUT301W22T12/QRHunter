@@ -2,8 +2,11 @@ package com.example.qrhunter;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -32,13 +35,16 @@ import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.maps.android.SphericalUtil;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.annotation.Nullable;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     FirebaseFirestore db;
+    SearchView searchView;
     private GoogleMap map;
     private ActivityMapsBinding binding;
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
@@ -47,7 +53,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Boolean locationPermissions = false;
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private UiSettings mUiSettings;
-    ArrayList<location> markers;
+    private ArrayList<locations> markers;
     private LatLng currentL;
 
 
@@ -58,11 +64,50 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         binding = ActivityMapsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        searchView = findViewById(R.id.idSearchView);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+
+        getSearchView();
         getLocationPermission();
+        mapFragment.getMapAsync(this);
+    }
+
+    public void getSearchView(){
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+
+                String location = searchView.getQuery().toString();
+
+                List<Address> addressList = null;
+
+                // checking if the entered location is null or not.
+                if (location != null || location.equals("")) {
+                    // creating and initializing a geo coder.
+                    Geocoder geocoder = new Geocoder(MapsActivity.this);
+                    try {
+                        // getting location from the location name and adding that location to address list.
+                        addressList = geocoder.getFromLocationName(location, 1);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    // we are getting the location from our list a first position.
+                    Address address = addressList.get(0);
+
+                    LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+
+                    map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
+                }
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                return false;
+            }
+        });
     }
 
 
@@ -110,7 +155,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         Double latitude = geo.getLatitude();
                         Double longitude = geo.getLongitude();
                         String score = String.valueOf(doc.getData().get("Score"));
-                        location markerLocation = new location(latitude, longitude, score);
+                        locations markerLocation = new locations(latitude, longitude, score);
                         markers.add(markerLocation);
                     } catch (Exception exception) {
                         Toast.makeText(MapsActivity.this, "Some QRcodes do not contain location" + error, Toast.LENGTH_SHORT).show();
@@ -118,7 +163,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
 
                 for (int i = 0; i < markers.size(); i++) {
-                    location marker = markers.get(i);
+                    locations marker = markers.get(i);
                     String score = marker.getScore();
                     LatLng QR = new LatLng(marker.getLongitude(), marker.getLatitude());
                     String distance = getDistance(QR, currentL);
