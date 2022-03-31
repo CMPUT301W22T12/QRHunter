@@ -2,12 +2,21 @@ package com.example.qrhunter;
 
 import java.security.MessageDigest;
 
+/**
+ * Class for handling the hashing of QR Codes and the Scoring of QR Codes
+ */
 public class ScoringHandler {
 
     public ScoringHandler() {
 
     }
 
+    /**
+     * Calculates the score of provided character and number of repititions
+     * @param hex character score is calculated for
+     * @param count number of repitions of character
+     * @return score provided by the sequence
+     */
     public int score(char hex, int count) {
         //convert the char into its hex value then
         //use the amount of consecutive duplicates to calculate score.
@@ -72,8 +81,9 @@ public class ScoringHandler {
 
     /**
      * Call this function to look through a hexadecimal representation of the sha256
-     * @param str
-     * @return
+     * Get's all repititions of characters and calculates the total String's score
+     * @param str String of relevant hash
+     * @return total score from hash
      */
     public int hexStringReader(String str) {
         //function to count the amount of repeating characters in a string
@@ -100,8 +110,9 @@ public class ScoringHandler {
     }
 
     /**
-     * @param stringText
-     * @return
+     * hash a provided string and return the hashed string using sha256 protocol
+     * @param stringText String to be hashed
+     * @return String of the hash
      */
     public String sha256(String stringText) {
         try {

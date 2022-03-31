@@ -48,6 +48,7 @@ public class qrScannedGetInfoActivity extends AppCompatActivity {
     String username;
     int score;
 
+    //Get required database references
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     FirebaseStorage storage = FirebaseStorage.getInstance();
 
@@ -92,15 +93,15 @@ public class qrScannedGetInfoActivity extends AppCompatActivity {
             }
         });
 
-
+        //When coming from a fresh scan ensure that the cache image file is empty
         if(comeFromScan){
             objectImageView.setVisibility(View.INVISIBLE);
-            //When coming from a fresh scan ensure that the cache image file is empty
             File imageCacheFile = new File(getCacheDir().getAbsolutePath(), "objectImageFile.jpg");
             if(imageCacheFile.exists()){
                 imageCacheFile.delete();
             }
         }
+        //If an imagePath is included, retrieve and show the image
         if(extras.containsKey("imagePath")){
             includeImage = true;
             objectImagePath = extras.getString("imagePath");
@@ -157,20 +158,21 @@ public class qrScannedGetInfoActivity extends AppCompatActivity {
                 return;
             }
 
+            //Get the user's current location estimate
             try {
-
                 gps_loc = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                 network_loc = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
+            //Try to get location from GPS
             if (gps_loc != null) {
                 final_loc = gps_loc;
                 latitude = final_loc.getLatitude();
                 longitude = final_loc.getLongitude();
             }
+            //If GPS doesn't work, get location from network
             else if (network_loc != null) {
                 final_loc = network_loc;
                 latitude = final_loc.getLatitude();
