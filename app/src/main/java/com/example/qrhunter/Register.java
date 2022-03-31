@@ -30,6 +30,9 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 
+/**
+ * Activity for registering a new user
+ */
 public class Register extends AppCompatActivity {
 
     EditText Username, PlayerName, Email,Phone;
@@ -43,6 +46,7 @@ public class Register extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+        //Get all relevant views from activity
         Username = findViewById(R.id.editTextUsernameText);
         PlayerName = findViewById(R.id.editTextPersonName);
         Email = findViewById(R.id.editTextTextEmailAddress);
@@ -56,17 +60,25 @@ public class Register extends AppCompatActivity {
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //Get values from all editText fields
                 String email = Email.getText().toString().trim();
                 String username = Username.getText().toString().trim();
                 String playerName = PlayerName.getText().toString().trim();
                 String Pno = Phone.getText().toString().trim();
                 Log.i(TAG, "username: " + username);
 
+                //Check if username is empty
                 if(TextUtils.isEmpty(username)){
                     Username.setError("Email is required");
                     return;
                 }
+                //Check username for invalid characters
+                if(username.contains("_")){
+                    Username.setError("The character '_' is forbidden. Please pick a new username");
+                    return;
+                }
 
+                //Add username to Firestore Database
                 DocumentReference docRef = fstore.collection("Users").document(username);
                 docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
@@ -90,6 +102,13 @@ public class Register extends AppCompatActivity {
         });
     }
 
+    /**
+     * Function for adding a user to the FireStore Database
+     * @param username String of the user's username (id)
+     * @param email String of the user's email (can be empty String)
+     * @param playerName String of the user's name (can be empty String)
+     * @param phoneNum String of user's phone number (can be empty String)
+     */
     public void addUserToDatabase(String username, String email, String playerName, String phoneNum){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         HashMap<String, Object> userInfo = new HashMap<>();

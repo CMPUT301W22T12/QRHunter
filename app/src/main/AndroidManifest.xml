@@ -27,7 +27,7 @@
             android:name=".LoginScreenActivity"
             android:exported="false" />
         <activity
-            android:name=".loginQRCodeActivity"
+            android:name=".loginQRCodeGeneratorActivity"
             android:exported="false" />
 
         <meta-data

@@ -58,13 +58,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void openLoginQRButton(View view){
-        Intent openLoginQRIntent = new Intent(MainActivity.this, loginQRCodeActivity.class);
+        Intent openLoginQRIntent = new Intent(MainActivity.this, loginQRCodeGeneratorActivity.class);
         startActivity(openLoginQRIntent);
     }
 
     public void testQRViewButton(View view){
+        String qrCodeId = "a78b4976f797ad00bca8bee0acf8b0ff7f78e1565b423bad794aa733ee265f6c";
         Intent testQRViewerIntent = new Intent(MainActivity.this, QRcodeViewerActivity.class);
-        testQRViewerIntent.putExtra("QRcode", "a78b4976f797ad00bca8bee0acf8b0ff7f78e1565b423bad794aa733ee265f6c");
+        testQRViewerIntent.putExtra("QRcode", qrCodeId);
         startActivity(testQRViewerIntent);
     }
 

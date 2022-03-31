@@ -53,7 +53,7 @@ public class loginQRScanActivity extends AppCompatActivity {
             // onClick function for the QR Code Found Button
             @Override
             public void onClick(View view){
-                Log.i(qrScanCameraActivity.class.getSimpleName(), "QR Code Found: " + qrCode);
+                //Pass content of QR Code back to login activity
                 Intent qrScannedIntent = new Intent(loginQRScanActivity.this, LoginScreenActivity.class);
                 qrScannedIntent.putExtra("QR_Content", qrCode);
                 startActivity(qrScannedIntent);

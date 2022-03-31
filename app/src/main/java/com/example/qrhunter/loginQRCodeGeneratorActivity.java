@@ -23,7 +23,7 @@ import java.io.IOException;
  * Activity that shows the users login QR Code
  * code referenced from: https://www.geeksforgeeks.org/how-to-generate-qr-code-in-android/
  */
-public class loginQRCodeActivity extends AppCompatActivity {
+public class loginQRCodeGeneratorActivity extends AppCompatActivity {
     QRGEncoder qrgEncoder;
     Bitmap bitmap;
     ImageView LoginQR;
@@ -32,6 +32,7 @@ public class loginQRCodeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_qrcode);
+        //Get username
         userHandler usrHandle = new userHandler();
         String username = null;
         LoginQR = findViewById(R.id.loginQRImageView);
@@ -40,10 +41,15 @@ public class loginQRCodeActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        //get hash of username
         ScoringHandler hashHandler = new ScoringHandler();
         String usernameHash = hashHandler.sha256(username);
+
+        //String combination of hashed user and username seperated by _
         String encodeString = usernameHash + "_" + username;
 
+        //Create a display for the QR Code
         WindowManager manager = (WindowManager) getSystemService(WINDOW_SERVICE);
         Display display = manager.getDefaultDisplay();
         Point point = new Point();
@@ -53,7 +59,7 @@ public class loginQRCodeActivity extends AppCompatActivity {
         int dimen = width < height ? width : height;
         dimen = dimen * 3 / 4;
 
-        Log.i("Tag", "username hash = " + usernameHash);
+        //Encode string as a bitmap of the QR Code, show Image
         qrgEncoder = new QRGEncoder(encodeString, null, QRGContents.Type.TEXT, dimen);
         try{
             bitmap = qrgEncoder.encodeAsBitmap();

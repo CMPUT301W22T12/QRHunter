@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -33,11 +34,15 @@ import com.google.firebase.storage.StorageReference;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Activity that allows the viewing of any QR Code by providing the QR Code ID through Intent
+ */
 public class QRcodeViewerActivity extends AppCompatActivity {
     String qrCodeHash;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     FirebaseStorage storage = FirebaseStorage.getInstance();
     DocumentReference docRef;
+    boolean admin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,9 +56,23 @@ public class QRcodeViewerActivity extends AppCompatActivity {
         }
         qrCodeHash = intent.getStringExtra("QRcode");
         docRef = db.collection("QRcode").document(qrCodeHash);
+        userHandler userHandle = new userHandler();
+        try {
+            admin = userHandle.getAdminStatus(this);
+            Log.i(TAG, "Admin User");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if(admin){
+            ImageButton deleteButton = findViewById(R.id.qrCodeViewerDeleteButton);
+            deleteButton.setVisibility(View.VISIBLE);
+        }
         fillOutQRInfo();
     }
 
+    /**
+     * This function changes/adds all relevant views in the activity to contain the information of the current QR Code
+     */
     public void fillOutQRInfo(){
         TextView pointsText = findViewById(R.id.qrCodeViewerPointsText);
         TextView uniqueScanText = findViewById(R.id.qrViewerUniqueScansText);
@@ -67,14 +86,27 @@ public class QRcodeViewerActivity extends AppCompatActivity {
                 uniqueScanText.setText("This code has been scanned by: " + uniqueUserCount + " users");
                 if(documentSnapshot.contains("Images")){
                     addPicturesToView();
+                }else{
+                    LinearLayout pictureLayout = findViewById(R.id.qrImageLinearLayout);
+                    TextView noPicturesText = new TextView(QRcodeViewerActivity.this);
+                    noPicturesText.setText("There are no Pictures for this QR Code");
+                    pictureLayout.addView(noPicturesText);
                 }
                 if(documentSnapshot.contains("Comments")){
                     addCommentsToView();
+                }else{
+                    LinearLayout commentsLayout = findViewById(R.id.qrViewerCommentsLinearLayout);
+                    TextView noCommentsText = new TextView(QRcodeViewerActivity.this);
+                    noCommentsText.setText("There are no comments for this QR Code");
+                    commentsLayout.addView(noCommentsText);
                 }
             }
         });
     }
 
+    /**
+     * Add's all pictures of the Current QR Code to a Horizontal Scrolling View
+     */
     public void addPicturesToView(){
         LinearLayout pictureLayout = findViewById(R.id.qrImageLinearLayout);
         docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -101,6 +133,9 @@ public class QRcodeViewerActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Adds all comments of current QR Code to a Vertical Scrolling comment section
+     */
     public void addCommentsToView(){
         LinearLayout commentsLayout = findViewById(R.id.qrViewerCommentsLinearLayout);
         docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -121,6 +156,10 @@ public class QRcodeViewerActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Button that allows the user to add a new comment to the currently open QR Code
+     * @param view Current View needed for a buttonPress function
+     */
     public void addCommentButton(View view){
         AlertDialog.Builder builder = new AlertDialog.Builder(QRcodeViewerActivity.this);
         LayoutInflater inflater = QRcodeViewerActivity.this.getLayoutInflater();
@@ -170,6 +209,11 @@ public class QRcodeViewerActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
+    /**
+     * Creates a single comment, this is a custom linear layout to allow username and text to be shown in a good format
+     * @param documentSnapshot Snapshot of a comment's Document in the Firestore Database
+     * @return Linear Layout of the Comment
+     */
     public LinearLayout createCommentLinearLayout(DocumentSnapshot documentSnapshot){
         LinearLayout commentLayout = new LinearLayout(QRcodeViewerActivity.this);
         commentLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
