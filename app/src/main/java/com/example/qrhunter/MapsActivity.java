@@ -2,7 +2,6 @@ package com.example.qrhunter;
 
 
 import static android.content.ContentValues.TAG;
-import static com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY;
 
 import android.Manifest;
 import android.content.Intent;
@@ -29,9 +28,7 @@ import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.CancellationToken;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.OnTokenCanceledListener;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.PlacesClient;
@@ -45,8 +42,10 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.maps.android.SphericalUtil;
+
 import java.util.ArrayList;
 import java.util.Arrays;
+
 import javax.annotation.Nullable;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
@@ -62,22 +61,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private UiSettings mUiSettings;
     private ArrayList<locations> markers;
     private LatLng currentL;
-
+    private LatLng QRL;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        double[] l;
-        if (savedInstanceState == null) {
-            Bundle extras = getIntent().getExtras();
-            if(extras == null) {
-                l = null;
-            } else {
-                l = extras.getDoubleArray("1");
-                currentL = new LatLng(l[0], l[1]);
-            }
-        }
 
         binding = ActivityMapsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -86,9 +74,27 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
 
+        initMap(savedInstanceState);
         initPlace();
         getLocationPermission();
         mapFragment.getMapAsync(this);
+    }
+
+    /**
+     * Initialize Places. Check for input value for the map
+     */
+    public void initMap(Bundle savedInstanceState){
+        double[] l;
+        if (savedInstanceState == null) {
+            Bundle extras = getIntent().getExtras();
+            if (extras != null) {
+                l = extras.getDoubleArray("1");
+                currentL = new LatLng(l[0], l[1]);
+                if (l.length == 4) {
+                    QRL = new LatLng(l[2], l[3]);
+                }
+            }
+        }
     }
 
     /**
@@ -153,9 +159,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         if (locationPermissions) {
             if (currentL != null) {
-                map.animateCamera(CameraUpdateFactory.newLatLngZoom(currentL, 15));
+                LatLng cameraL = currentL;
+                if (QRL != null)
+                    cameraL = QRL;
+                map.animateCamera(CameraUpdateFactory.newLatLngZoom(cameraL, 15));
                 CameraPosition cameraPosition = new CameraPosition.Builder()
-                        .target(currentL)      // Sets the center of the map to location user
+                        .target(cameraL)      // Sets the center of the map to location user
                         .zoom(15)                   // Sets the zoom
                         .build();                   // Creates a CameraPosition from the builder
                 map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
@@ -190,9 +199,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         String score = String.valueOf(doc.getData().get("Score"));
                         locations markerLocation = new locations(latitude, longitude, score);
                         markers.add(markerLocation);
-                    } catch (Exception exception) {
-                        Toast.makeText(MapsActivity.this, "Some QRcodes do not contain location" + error, Toast.LENGTH_SHORT).show();
-                    }
+                    } catch (Exception exception) {}
                 }
 
                 for (int i = 0; i < markers.size(); i++) {
