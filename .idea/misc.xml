@@ -3,8 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Jadon/AndroidStudioProjects/QRHunterApp/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.38125" />
         <entry key="..\:/Users/Jadon/AndroidStudioProjects/QRHunterApp/app/src/main/res/drawable/comment_border.xml" value="0.38125" />
         <entry key="..\:/Users/Jadon/AndroidStudioProjects/QRHunterApp/app/src/main/res/drawable/comment_box_border.xml" value="0.38125" />
+        <entry key="..\:/Users/Jadon/AndroidStudioProjects/QRHunterApp/app/src/main/res/drawable/ic_launcher_background.xml" value="0.38125" />
         <entry key="..\:/Users/Jadon/AndroidStudioProjects/QRHunterApp/app/src/main/res/layout/activity_login.xml" value="0.40520833333333334" />
         <entry key="..\:/Users/Jadon/AndroidStudioProjects/QRHunterApp/app/src/main/res/layout/activity_login_qrcode.xml" value="0.33" />
         <entry key="..\:/Users/Jadon/AndroidStudioProjects/QRHunterApp/app/src/main/res/layout/activity_login_qrscan.xml" value="0.42916666666666664" />
@@ -14,7 +16,10 @@
         <entry key="..\:/Users/Jadon/AndroidStudioProjects/QRHunterApp/app/src/main/res/layout/activity_qr_scanned_get_info.xml" value="0.67" />
         <entry key="..\:/Users/Jadon/AndroidStudioProjects/QRHunterApp/app/src/main/res/layout/activity_qrcode_viewer.xml" value="0.5" />
         <entry key="..\:/Users/Jadon/AndroidStudioProjects/QRHunterApp/app/src/main/res/layout/activity_register.xml" value="0.4192708333333333" />
+        <entry key="..\:/Users/Jadon/AndroidStudioProjects/QRHunterApp/app/src/main/res/layout/activity_user_profile_viewer.xml" value="0.3875" />
         <entry key="..\:/Users/Jadon/AndroidStudioProjects/QRHunterApp/app/src/main/res/layout/add_comment_layout.xml" value="0.3651041666666667" />
+        <entry key="..\:/Users/Jadon/AndroidStudioProjects/QRHunterApp/app/src/main/res/layout/testing_layout.xml" value="0.5" />
+        <entry key="..\:/Users/loyforyou/Desktop/loy/QRHunter/app/src/main/res/layout/activity_maps.xml" value="0.24895833333333334" />
       </map>
     </option>
   </component>

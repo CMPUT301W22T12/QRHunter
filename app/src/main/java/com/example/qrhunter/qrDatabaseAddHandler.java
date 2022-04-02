@@ -95,6 +95,10 @@ public class qrDatabaseAddHandler {
         String format = s.format(new Date());
         String commentId = "C-" + uid + "-" + format;
         db.collection("Comments").document(commentId).set(commentData);
+
+        //add comment to user profile
+        db.collection("Users").document(username).update("Comments", FieldValue.arrayUnion(commentId));
+
         return commentId;
     }
 
