@@ -90,6 +90,7 @@ boolean admin;
                     public void onClick(DialogInterface dialog, int id) {
                         deleteHandler deleter = new deleteHandler(db);
                         deleter.deleteUser(userID);
+                        finish();
                     }
                 })
                 .setNegativeButton("No", null)

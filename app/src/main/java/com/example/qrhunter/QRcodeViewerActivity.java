@@ -243,6 +243,7 @@ public class QRcodeViewerActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int id) {
                         deleteHandler deleter = new deleteHandler(db, storage);
                         deleter.deleteQRcode(qrCodeHash);
+                        finish();
                     }
                 })
                 .setNegativeButton("No", null)

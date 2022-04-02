@@ -42,11 +42,11 @@ FirebaseStorage storage;
      * @param qrID database ID of the QR Code
      */
     public void deleteQRcode(String qrID){
-        DocumentReference docRef = db.collection("QRCode").document(qrID);
+        DocumentReference docRef = db.collection("QRcode").document(qrID);
         docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                int score = (int) documentSnapshot.get("Score");
+                int score = Integer.parseInt(String.valueOf(documentSnapshot.get("Score")));
                 List<String> commentList = (List<String>) documentSnapshot.get("Comments");
                 for(String commentId : commentList){
                     deleteComment(commentId);
@@ -59,19 +59,20 @@ FirebaseStorage storage;
                 for(String user : usersList){
                     removeQRfromUser(user, score, qrID);
                 }
+                docRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Log.d(TAG, "QR successfully deleted");
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error deleting QR", e);
+                    }
+                });
             }
         });
-        docRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void unused) {
-                Log.d(TAG, "QR successfully deleted");
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.w(TAG, "Error deleting QR", e);
-            }
-        });
+
     }
 
     public void deleteUser(String userID){
@@ -87,19 +88,20 @@ FirebaseStorage storage;
                 for (String commentID : CommentList){
                     deleteComment(commentID);
                 }
+                docRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Log.d(TAG, "User successfully deleted");
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error deleting User", e);
+                    }
+                });
             }
         });
-        docRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void unused) {
-                Log.d(TAG, "User successfully deleted");
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.w(TAG, "Error deleting User", e);
-            }
-        });
+
     }
 
     /**
@@ -153,8 +155,8 @@ FirebaseStorage storage;
         userDoc.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                userDoc.update("Score", FieldValue.increment(-1*score));
-                userDoc.update("QRcides", FieldValue.arrayRemove(qrID));
+                userDoc.update("totalScore", FieldValue.increment(-1*score));
+                userDoc.update("QRcodes", FieldValue.arrayRemove(qrID));
             }
         });
     }
