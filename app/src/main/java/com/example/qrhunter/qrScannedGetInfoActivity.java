@@ -150,34 +150,10 @@ public class qrScannedGetInfoActivity extends AppCompatActivity {
         double longitude = 0.0;
         if(addLocationCheckbox.isChecked()){
             ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_NETWORK_STATE}, 1);
-            Location gps_loc = null, network_loc = null, final_loc;
-            LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                    && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                    && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_NETWORK_STATE) != PackageManager.PERMISSION_GRANTED) {
-                return;
-            }
-
-            //Get the user's current location estimate
-            try {
-                gps_loc = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                network_loc = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            //Try to get location from GPS
-            if (gps_loc != null) {
-                final_loc = gps_loc;
-                latitude = final_loc.getLatitude();
-                longitude = final_loc.getLongitude();
-            }
-            //If GPS doesn't work, get location from network
-            else if (network_loc != null) {
-                final_loc = network_loc;
-                latitude = final_loc.getLatitude();
-                longitude = final_loc.getLongitude();
-            }
+            locationHandler locationHandler = new locationHandler(this);
+            double[] coords = locationHandler.getCurrentLocation();
+            latitude = coords[0];
+            longitude = coords[1];
         }
 
         //If the user took a picture to include

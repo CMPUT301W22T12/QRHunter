@@ -8,7 +8,9 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -85,7 +87,15 @@ public class MainActivity extends AppCompatActivity {
 
     public void openMapButton(View view){
         Intent openMapIntent = new Intent(MainActivity.this, MapsActivity.class);
-        if (currentL != null) openMapIntent.putExtra("1", currentL);
+        ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_NETWORK_STATE}, 1);
+        if (currentL != null){
+            openMapIntent.putExtra("1", currentL);
+        } else {
+            locationHandler locationHandler = new locationHandler(this);
+            double[] coords = locationHandler.getCurrentLocation();
+            openMapIntent.putExtra("1", coords);
+        }
+
         openMapActivityResultLauncher.launch(openMapIntent);
     }
 
