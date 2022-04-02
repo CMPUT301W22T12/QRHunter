@@ -236,8 +236,17 @@ public class QRcodeViewerActivity extends AppCompatActivity {
      * @param view current view to allow button interaction
      */
     public void deleteButton(View view){
-        deleteHandler deleter = new deleteHandler(db, storage);
-        deleter.deleteQRcode(qrCodeHash);
+        new AlertDialog.Builder(this)
+                .setMessage("Are you sure you want to delete this QR Code?")
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        deleteHandler deleter = new deleteHandler(db, storage);
+                        deleter.deleteQRcode(qrCodeHash);
+                    }
+                })
+                .setNegativeButton("No", null)
+                .show();
     }
 
     public void backButtonPressed(View view){
