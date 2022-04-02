@@ -2,9 +2,14 @@ package com.example.qrhunter;
 
 import static android.content.ContentValues.TAG;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,11 +22,14 @@ import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
     String username;
+    double[] currentL;
+    ActivityResultLauncher<Intent> openMapActivityResultLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        InitMap();
         File userInfoFile = new File(getFilesDir(), "userInfo");
         if(userInfoFile.exists()){
             userHandler userhandle = new userHandler();
@@ -40,6 +48,21 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void InitMap(){
+        openMapActivityResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        if (result.getResultCode() == Activity.RESULT_OK) {
+                            // There are no request codes
+                            Intent data = result.getData();
+                            currentL = data.getDoubleArrayExtra("1");
+                        }
+                    }
+                });
+    }
+
     public void Logout(View view) {
         File userInfo = new File(getFilesDir(), "userInfo");
         userInfo.delete();
@@ -54,7 +77,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void openMapButton(View view){
         Intent openMapIntent = new Intent(MainActivity.this, MapsActivity.class);
-        startActivity(openMapIntent);
+        if (currentL != null) openMapIntent.putExtra("1", currentL);
+        openMapActivityResultLauncher.launch(openMapIntent);
     }
 
     public void openLoginQRButton(View view){
