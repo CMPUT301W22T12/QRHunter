@@ -42,9 +42,17 @@ public class MainActivity extends AppCompatActivity {
 
     public void Logout(View view) {
         File userInfo = new File(getFilesDir(), "userInfo");
-        userInfo.delete();
-        startActivity(new Intent(getApplicationContext(), LoginScreenActivity.class));
-        finish();
+        new AlertDialog.Builder(this)
+                .setMessage("Are you sure you want to logout?")
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        userInfo.delete();
+                        startActivity(new Intent(getApplicationContext(), LoginScreenActivity.class));
+                        finish();                    }
+                })
+                .setNegativeButton("No", null)
+                .show();
     }
 
     public void scanNewCodeButton(View view){
@@ -62,11 +70,21 @@ public class MainActivity extends AppCompatActivity {
         startActivity(openLoginQRIntent);
     }
 
+    public void openUserProfileButton(View view){
+        Intent openProfileIntent = new Intent(MainActivity.this, userProfileViewerActivity.class);
+        openProfileIntent.putExtra("userID", username);
+        startActivity(openProfileIntent);
+    }
+
     public void testQRViewButton(View view){
         String qrCodeId = "a78b4976f797ad00bca8bee0acf8b0ff7f78e1565b423bad794aa733ee265f6c";
         Intent testQRViewerIntent = new Intent(MainActivity.this, QRcodeViewerActivity.class);
         testQRViewerIntent.putExtra("QRcode", qrCodeId);
         startActivity(testQRViewerIntent);
+    }
+
+    public void exitButton(View view){
+        onBackPressed();
     }
 
     @Override

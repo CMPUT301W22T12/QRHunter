@@ -6,112 +6,269 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="42dp"
-        android:layout_marginBottom="17dp"
-        android:text="Previous QR codes"
-        app:layout_constraintBottom_toTopOf="@+id/button3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/openLoginQRButton" />
-
-    <Button
-        android:id="@+id/openLoginQRButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="25dp"
-        android:onClick="openLoginQRButton"
-        android:text="Generate login QR"
-        app:layout_constraintBottom_toTopOf="@+id/button3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/button3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="57dp"
-        android:layout_marginBottom="29dp"
-        android:text="Generate game status QR code"
-        app:layout_constraintBottom_toTopOf="@+id/search"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/openLoginQRButton" />
-
     <ImageButton
-        android:id="@+id/map"
-        android:layout_width="79dp"
-        android:layout_height="79dp"
-        android:layout_marginStart="47dp"
-        android:layout_marginTop="46dp"
-        android:layout_marginEnd="41dp"
-        android:layout_marginBottom="243dp"
+        android:id="@+id/MainMenuMapButton"
+        android:layout_width="0dp"
+        android:layout_height="160dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
         android:onClick="openMapButton"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/search"
+        app:layout_constraintEnd_toStartOf="@+id/MainMenuScanQRButton"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button3"
         app:srcCompat="@android:drawable/ic_menu_mapmode"
         tools:ignore="SpeakableTextPresentCheck" />
 
     <ImageButton
-        android:id="@+id/search"
-        android:layout_width="74dp"
-        android:layout_height="83dp"
-        android:layout_marginStart="41dp"
-        android:layout_marginTop="46dp"
-        android:layout_marginEnd="39dp"
-        android:layout_marginBottom="35dp"
-        app:layout_constraintBottom_toTopOf="@+id/logout"
-        app:layout_constraintEnd_toStartOf="@+id/camera"
-        app:layout_constraintStart_toEndOf="@+id/map"
-        app:layout_constraintTop_toBottomOf="@+id/button3"
-        app:srcCompat="@android:drawable/ic_menu_search"
-        tools:ignore="SpeakableTextPresentCheck" />
-
-    <ImageButton
-        android:id="@+id/camera"
-        android:layout_width="80dp"
-        android:layout_height="79dp"
-        android:layout_marginStart="39dp"
-        android:layout_marginTop="46dp"
-        android:layout_marginEnd="51dp"
-        android:layout_marginBottom="243dp"
+        android:id="@+id/MainMenuScanQRButton"
+        android:layout_width="0dp"
+        android:layout_height="160dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
         android:onClick="scanNewCodeButton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/search"
-        app:layout_constraintTop_toBottomOf="@+id/button3"
+        app:layout_constraintStart_toEndOf="@+id/MainMenuMapButton"
         app:srcCompat="@android:drawable/ic_menu_camera"
         tools:ignore="SpeakableTextPresentCheck" />
 
-    <Button
-        android:id="@+id/logout"
+    <ImageButton
+        android:id="@+id/MainMenuProfileButton"
+        android:layout_width="0dp"
+        android:layout_height="160dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:onClick="openUserProfileButton"
+        app:layout_constraintBottom_toTopOf="@+id/MainMenuMapButton"
+        app:layout_constraintEnd_toStartOf="@+id/MainMenuLeaderboardButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@android:drawable/ic_menu_myplaces" />
+
+    <ImageButton
+        android:id="@+id/MainMenuLeaderboardButton"
+        android:layout_width="0dp"
+        android:layout_height="160dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/MainMenuScanQRButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/MainMenuProfileButton"
+        app:srcCompat="@android:drawable/ic_menu_sort_by_size" />
+
+    <TextView
+        android:id="@+id/MainMenuProfileButtonText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:text="PROFILE"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/MainMenuProfileButton"
+        app:layout_constraintEnd_toEndOf="@+id/MainMenuProfileButton"
+        app:layout_constraintStart_toStartOf="@+id/MainMenuProfileButton" />
+
+    <TextView
+        android:id="@+id/MainMenuLeaderboardButtonText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:text="LEADERBOARD"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/MainMenuLeaderboardButton"
+        app:layout_constraintEnd_toEndOf="@+id/MainMenuLeaderboardButton"
+        app:layout_constraintStart_toStartOf="@+id/MainMenuLeaderboardButton" />
+
+    <TextView
+        android:id="@+id/MainMenuMapButtonText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="167dp"
-        android:layout_marginTop="35dp"
-        android:layout_marginEnd="150dp"
-        android:layout_marginBottom="156dp"
-        android:text="Logout"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:text="QR MAP"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/MainMenuMapButton"
+        app:layout_constraintEnd_toEndOf="@+id/MainMenuMapButton"
+        app:layout_constraintStart_toStartOf="@+id/MainMenuMapButton" />
+
+    <TextView
+        android:id="@+id/MainMenuScanButtonText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:text="SCAN QR"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/MainMenuScanQRButton"
+        app:layout_constraintEnd_toEndOf="@+id/MainMenuScanQRButton"
+        app:layout_constraintHorizontal_bias="0.477"
+        app:layout_constraintStart_toStartOf="@+id/MainMenuScanQRButton" />
+
+    <ImageButton
+        android:id="@+id/MainMenuSearchButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:scaleType="fitStart"
+        app:layout_constraintBottom_toTopOf="@+id/MainMenuProfileButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/search"
-        android:onClick="Logout"/>
+        app:srcCompat="@android:drawable/ic_menu_search" />
 
-    <Button
-        android:id="@+id/testButtonIgnore"
+    <TextView
+        android:id="@+id/MainMenuSearchButtonText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="96dp"
+        android:text="SEARCH FOR USER"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/MainMenuSearchButton"
+        app:layout_constraintEnd_toEndOf="@+id/MainMenuSearchButton"
+        app:layout_constraintStart_toStartOf="@+id/MainMenuSearchButton"
+        app:layout_constraintTop_toTopOf="@+id/MainMenuSearchButton" />
+
+    <ImageButton
+        android:id="@+id/MainMenuUserQRButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:scaleType="fitStart"
+        app:layout_constraintBottom_toTopOf="@+id/MainMenuSearchButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@android:drawable/ic_menu_share" />
+
+    <TextView
+        android:id="@+id/MainMenuUserQRButtonText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="96dp"
+        android:text="GENERATE USER QR"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/MainMenuUserQRButton"
+        app:layout_constraintEnd_toEndOf="@+id/MainMenuUserQRButton"
+        app:layout_constraintStart_toStartOf="@+id/MainMenuUserQRButton"
+        app:layout_constraintTop_toTopOf="@+id/MainMenuUserQRButton" />
+
+    <ImageButton
+        android:id="@+id/MainMenuLoginQRButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:onClick="openLoginQRButton"
+        android:scaleType="fitStart"
+        app:layout_constraintBottom_toTopOf="@+id/MainMenuUserQRButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@android:drawable/ic_menu_view" />
+
+    <TextView
+        android:id="@+id/MainMenuLoginQrButtonText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="96dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="GENERATE LOGIN QR"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/MainMenuLoginQRButton"
+        app:layout_constraintEnd_toEndOf="@+id/MainMenuLoginQRButton"
+        app:layout_constraintStart_toStartOf="@+id/MainMenuLoginQRButton"
+        app:layout_constraintTop_toTopOf="@+id/MainMenuLoginQRButton" />
+
+    <ImageButton
+        android:id="@+id/MainMenuLogoutButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:onClick="Logout"
+        android:scaleType="fitEnd"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/MainMenuExitButton"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/ic_menu_revert" />
+
+    <ImageButton
+        android:id="@+id/MainMenuExitButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:onClick="exitButton"
+        android:scaleType="fitStart"
+        app:layout_constraintEnd_toStartOf="@+id/MainMenuLogoutButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
+
+    <TextView
+        android:id="@+id/MainMenuExitButtonText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="64dp"
+        android:text="EXIT"
+        android:textAlignment="textStart"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/MainMenuExitButton"
+        app:layout_constraintEnd_toEndOf="@+id/MainMenuExitButton"
+        app:layout_constraintStart_toStartOf="@+id/MainMenuExitButton"
+        app:layout_constraintTop_toTopOf="@+id/MainMenuExitButton" />
+
+    <TextView
+        android:id="@+id/MainMenuLogoutButtonText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="64dp"
+        android:text="LOGOUT"
+        android:textAlignment="viewEnd"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/MainMenuLogoutButton"
+        app:layout_constraintEnd_toEndOf="@+id/MainMenuLogoutButton"
+        app:layout_constraintStart_toStartOf="@+id/MainMenuLogoutButton"
+        app:layout_constraintTop_toTopOf="@+id/MainMenuLogoutButton" />
+
+    <TextView
+        android:id="@+id/MainMenuTitleScreenText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="testQRViewButton"
-        android:text="Test"
-        app:layout_constraintTop_toBottomOf="@+id/logout"
-        tools:layout_editor_absoluteX="159dp" />
+        android:text="QR HUNTER"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="60sp"
+        android:textStyle="bold|italic"
+        app:layout_constraintBottom_toTopOf="@+id/MainMenuLoginQRButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/MainMenuLogoutButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

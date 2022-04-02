@@ -73,7 +73,7 @@ public class QRcodeViewerActivity extends AppCompatActivity {
     /**
      * This function changes/adds all relevant views in the activity to contain the information of the current QR Code
      */
-    public void fillOutQRInfo(){
+    private void fillOutQRInfo(){
         TextView pointsText = findViewById(R.id.qrCodeViewerPointsText);
         TextView uniqueScanText = findViewById(R.id.qrViewerUniqueScansText);
         docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -107,7 +107,7 @@ public class QRcodeViewerActivity extends AppCompatActivity {
     /**
      * Add's all pictures of the Current QR Code to a Horizontal Scrolling View
      */
-    public void addPicturesToView(){
+    private void addPicturesToView(){
         LinearLayout pictureLayout = findViewById(R.id.qrImageLinearLayout);
         docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -136,7 +136,7 @@ public class QRcodeViewerActivity extends AppCompatActivity {
     /**
      * Adds all comments of current QR Code to a Vertical Scrolling comment section
      */
-    public void addCommentsToView(){
+    private void addCommentsToView(){
         LinearLayout commentsLayout = findViewById(R.id.qrViewerCommentsLinearLayout);
         docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -160,7 +160,7 @@ public class QRcodeViewerActivity extends AppCompatActivity {
      * Button that allows the user to add a new comment to the currently open QR Code
      * @param view Current View needed for a buttonPress function
      */
-    public void addCommentButton(View view){
+    private void addCommentButton(View view){
         AlertDialog.Builder builder = new AlertDialog.Builder(QRcodeViewerActivity.this);
         LayoutInflater inflater = QRcodeViewerActivity.this.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.add_comment_layout, null);
@@ -214,7 +214,7 @@ public class QRcodeViewerActivity extends AppCompatActivity {
      * @param documentSnapshot Snapshot of a comment's Document in the Firestore Database
      * @return Linear Layout of the Comment
      */
-    public LinearLayout createCommentLinearLayout(DocumentSnapshot documentSnapshot){
+    private LinearLayout createCommentLinearLayout(DocumentSnapshot documentSnapshot){
         LinearLayout commentLayout = new LinearLayout(QRcodeViewerActivity.this);
         commentLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         commentLayout.setOrientation(LinearLayout.VERTICAL);
@@ -229,6 +229,24 @@ public class QRcodeViewerActivity extends AppCompatActivity {
         commentLayout.addView(usernameText);
         commentLayout.addView(commentText);
         return commentLayout;
+    }
+
+    /**
+     * Button to delete the currently open QR Code. Only accessible by admin accounts
+     * @param view current view to allow button interaction
+     */
+    public void deleteButton(View view){
+        new AlertDialog.Builder(this)
+                .setMessage("Are you sure you want to delete this QR Code?")
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        deleteHandler deleter = new deleteHandler(db, storage);
+                        deleter.deleteQRcode(qrCodeHash);
+                    }
+                })
+                .setNegativeButton("No", null)
+                .show();
     }
 
     public void backButtonPressed(View view){
