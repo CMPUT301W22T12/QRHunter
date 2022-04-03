@@ -45,7 +45,7 @@ public class Leaderboard extends AppCompatActivity implements LeaderboardAdapter
 
     @Override
     public int SelectedItemId() {
-        return R.id.goToLeaderboard;
+        return R.id.MainMenuLeaderboardButton;
     }
 
     @Override
