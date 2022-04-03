@@ -24,6 +24,10 @@ import org.w3c.dom.Text;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * This class is the activity responsible for viewing a user's profile
+ * It contains all the user's stats as well as button links to the users leaderboards and qr history
+ */
 public class userProfileViewerActivity extends AppCompatActivity {
 String userID;
 FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -56,6 +60,9 @@ boolean admin;
         fillOutUserInfo();
     }
 
+    /**
+     * Function that fills all text on screen with user's info and stats from the database
+     */
     private void fillOutUserInfo(){
         TextView userTitleText = findViewById(R.id.userProfileViewerTitleText);
         TextView userPointsText = findViewById(R.id.userProfileViewerPointsText);
@@ -92,6 +99,10 @@ boolean admin;
                 .show();
     }
 
+    /**
+     * Button function to open the selected user's position on the User Score leaderboard
+     * @param view standard onclick function parameter
+     */
     public void userScoreLeaderboardButton(View view){
         Intent userScoreLeaderboardIntent = new Intent(userProfileViewerActivity.this, leaderboardActivity.class);
         userScoreLeaderboardIntent.putExtra("user", userID);
@@ -99,6 +110,10 @@ boolean admin;
         startActivity(userScoreLeaderboardIntent);
     }
 
+    /**
+     * Button function to open the selected user's position on the User Scans leaderboard
+     * @param view standard onclick function parameter
+     */
     public void userScansLeaderboardButton(View view){
         Intent userScoreLeaderboardIntent = new Intent(userProfileViewerActivity.this, leaderboardActivity.class);
         userScoreLeaderboardIntent.putExtra("user", userID);
@@ -106,6 +121,10 @@ boolean admin;
         startActivity(userScoreLeaderboardIntent);
     }
 
+    /**
+     * Button function to open the selected user's position on the Highest QR Score leaderboard
+     * @param view standard onclick function parameter
+     */
     public void userQRScoreLeaderboardButton(View view){
         Intent userScoreLeaderboardIntent = new Intent(userProfileViewerActivity.this, leaderboardActivity.class);
         userScoreLeaderboardIntent.putExtra("user", userID);

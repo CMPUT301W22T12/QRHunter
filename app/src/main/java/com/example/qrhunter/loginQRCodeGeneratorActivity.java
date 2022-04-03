@@ -69,6 +69,10 @@ public class loginQRCodeGeneratorActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Button function to return to main menu
+     * @param v standard onClick function parameter
+     */
     public void returnToMainButtonFunction(View v){
         Intent returnToMainIntent = new Intent(this, MainActivity.class);
         startActivity(returnToMainIntent);

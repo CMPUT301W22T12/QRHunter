@@ -34,6 +34,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.concurrent.ExecutionException;
 
+/**
+ * Camera activity for scanning a users search QR code
+ */
 public class userSearchQRScanActivity extends AppCompatActivity {
     private static final int PERMISSION_REQUEST_CAMERA = 0;
 
@@ -74,7 +77,12 @@ public class userSearchQRScanActivity extends AppCompatActivity {
         requestCamera();
     }
 
-    public Boolean confirmValidUsernameQR(String qrCode){
+    /**
+     * Function confirms whether the scanned QR code is a valid User Search QR
+     * @param qrCode value of scanned QR code
+     * @return boolean true or false for whether it is valid or not
+     */
+    public boolean confirmValidUsernameQR(String qrCode){
         if(!qrCode.contains("_")){
             return false;
         }

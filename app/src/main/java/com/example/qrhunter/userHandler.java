@@ -28,6 +28,12 @@ public class userHandler {
         return username;
     }
 
+    /**
+     * Check if the currently logged in user is an administrator account
+     * @param context context of the calling activity
+     * @return boolean true or false for admin status
+     * @throws IOException
+     */
     public boolean getAdminStatus(Context context) throws IOException {
         File adminUserFile = new File(context.getFilesDir(), "adminUser");
         byte[] bytes = new byte[(int) adminUserFile.length()];

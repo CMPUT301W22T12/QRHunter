@@ -19,6 +19,9 @@ import java.io.IOException;
 import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
 
+/**
+ * Activity for generating a user's search QR Code that can be scanned by another user to open the profile
+ */
 public class userSearchQRGeneratorActivity extends AppCompatActivity {
     QRGEncoder qrgEncoder;
     Bitmap bitmap;

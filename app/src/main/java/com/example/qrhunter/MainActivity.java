@@ -24,7 +24,6 @@ import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
     String username;
-    double[] currentL;
     ActivityResultLauncher<Intent> openMapActivityResultLauncher;
 
     @Override

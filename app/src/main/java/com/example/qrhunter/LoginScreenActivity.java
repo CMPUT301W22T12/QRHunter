@@ -24,6 +24,7 @@ import java.nio.charset.StandardCharsets;
 
 /**
  * Activity for the user Log-in screen
+ * If opened with the intent containing extra "QR_Content" it will check if the extra is a valid login code and allow logging in as scanned user
  */
 public class LoginScreenActivity extends AppCompatActivity {
     Button scanButton;

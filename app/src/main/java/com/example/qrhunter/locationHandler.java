@@ -8,12 +8,24 @@ import android.location.LocationManager;
 
 import androidx.core.app.ActivityCompat;
 
+/**
+ * Handler class for getting the devices current location
+ */
 public class locationHandler {
     Context callerContext;
+
+    /**
+     * Constructor for the locationHandler
+     * @param context context of the calling activity
+     */
     public locationHandler(Context context){
         this.callerContext = context;
     }
 
+    /**
+     * This function returns the device's current location as Long/Lat Coordinates
+     * @return an array of doubles, the 0th index is Latitude, the 1st index is Longitude
+     */
     public double[] getCurrentLocation(){
         double latitude = 0.0, longitude = 0.0;
         Location gps_loc = null, network_loc = null, final_loc;

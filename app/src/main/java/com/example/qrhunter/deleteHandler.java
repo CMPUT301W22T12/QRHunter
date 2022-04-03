@@ -76,6 +76,10 @@ FirebaseStorage storage;
 
     }
 
+    /**
+     * Function to delete a user from the database along with all associated comments
+     * @param userID ID of the user to be removed
+     */
     public void deleteUser(String userID){
         DocumentReference docRef = db.collection("Users").document(userID);
         docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -163,6 +167,11 @@ FirebaseStorage storage;
         });
     }
 
+    /**
+     * Function to remove a user from a QR codes list of Users that have scanned it
+     * @param userID userID of the user to be removed
+     * @param qrID ID of the QR to remove from
+     */
     private void removeUserFromQR(String userID, String qrID){
         DocumentReference qrDoc = db.collection("QRcode").document(qrID);
         qrDoc.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {

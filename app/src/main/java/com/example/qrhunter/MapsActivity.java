@@ -16,7 +16,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
-import com.example.qrhunter.databinding.ActivityMapsBinding;
+//import com.example.qrhunter.databinding.ActivityMapsBinding;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -48,11 +48,15 @@ import java.util.Arrays;
 
 import javax.annotation.Nullable;
 
+/**
+ * Activity for the QR Code map
+ *
+ */
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     FirebaseFirestore db;
     private GoogleMap map;
-    private ActivityMapsBinding binding;
+    //private ActivityMapsBinding binding;
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
     private static final String COURSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
@@ -67,8 +71,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        binding = ActivityMapsBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        //binding = ActivityMapsBinding.inflate(getLayoutInflater());
+        //setContentView(binding.getRoot());
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()

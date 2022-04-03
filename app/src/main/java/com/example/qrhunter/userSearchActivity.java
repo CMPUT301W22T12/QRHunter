@@ -17,6 +17,9 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+/**
+ * Activity for searching for another user by either username or scanning of QR code
+ */
 public class userSearchActivity extends AppCompatActivity {
     EditText usernameView;
     FirebaseFirestore db;
@@ -35,6 +38,11 @@ public class userSearchActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Button function for searching by username
+     * Takes text from username search bar and searches for selected user, after checking if username is valid
+     * @param view standard onClick function parameter
+     */
     public void searchByUsernameButton(View view){
         String username = usernameView.getText().toString().trim();
         if(username.isEmpty()){
@@ -64,6 +72,10 @@ public class userSearchActivity extends AppCompatActivity {
         return;
     }
 
+    /**
+     * Button function for searching by picture, opens camera to scan QR
+     * @param view standard onClick function parameter
+     */
     public void searchByQRButton(View view){
         //open camera to scan QR Code
         Intent openQRScan = new Intent(userSearchActivity.this, userSearchQRScanActivity.class);
