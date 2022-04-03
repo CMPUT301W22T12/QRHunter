@@ -18,6 +18,21 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.QRHunter">
         <activity
+            android:name=".LeaderBoardHolder"
+            android:exported="false" />
+        <activity
+            android:name=".LeaderboardAdapter"
+            android:exported="false" />
+        <activity
+            android:name=".LeaderboardHolder"
+            android:exported="false" />
+        <activity
+            android:name=".LeaderboardAdapter"
+            android:exported="false" />
+        <activity
+            android:name=".leaderboard"
+            android:exported="false" />
+        <activity
             android:name=".QRcodeViewerActivity"
             android:exported="false" />
         <activity

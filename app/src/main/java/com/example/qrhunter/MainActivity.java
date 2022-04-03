@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 
 
 import java.io.File;
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(registerIntent);
             finish();
         }
+
     }
 
     public void Logout(View view) {
@@ -69,6 +71,12 @@ public class MainActivity extends AppCompatActivity {
         startActivity(testQRViewerIntent);
     }
 
+    // Open Leaderboard
+    public void openLeaderboard(View view){
+        Intent openLeaderboard = new Intent(MainActivity.this, Leaderboard.class);
+        startActivity(openLeaderboard);
+    }
+
     @Override
     public void onBackPressed() {
         new AlertDialog.Builder(this)
@@ -82,6 +90,4 @@ public class MainActivity extends AppCompatActivity {
                 .setNegativeButton("No", null)
                 .show();
     }
-
-
 }

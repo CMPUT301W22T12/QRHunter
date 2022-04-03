@@ -3,6 +3,13 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/QRHunter/app/src/main/res/layout/activity_leader_board.xml" value="0.18034447821681865" />
+        <entry key="..\:/QRHunter/app/src/main/res/layout/activity_leader_board_adapter.xml" value="0.18617021276595744" />
+        <entry key="..\:/QRHunter/app/src/main/res/layout/activity_leader_board_holder.xml" value="0.17933130699088146" />
+        <entry key="..\:/QRHunter/app/src/main/res/layout/activity_leaderboard.xml" value="0.36666666666666664" />
+        <entry key="..\:/QRHunter/app/src/main/res/layout/activity_leaderboard_adapter.xml" value="0.3645833333333333" />
+        <entry key="..\:/QRHunter/app/src/main/res/layout/activity_main.xml" value="0.36666666666666664" />
+        <entry key="..\:/QRHunter/app/src/main/res/layout/leaderboardreceycleview.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Jadon/AndroidStudioProjects/QRHunterApp/app/src/main/res/drawable/comment_border.xml" value="0.38125" />
         <entry key="..\:/Users/Jadon/AndroidStudioProjects/QRHunterApp/app/src/main/res/drawable/comment_box_border.xml" value="0.38125" />
         <entry key="..\:/Users/Jadon/AndroidStudioProjects/QRHunterApp/app/src/main/res/layout/activity_login.xml" value="0.40520833333333334" />
