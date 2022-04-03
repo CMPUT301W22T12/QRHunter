@@ -110,6 +110,16 @@ public class MainActivity extends AppCompatActivity {
         startActivity(openProfileIntent);
     }
 
+    public void openUserSearchButton(View view){
+        Intent openUserSearchIntent = new Intent(MainActivity.this, userSearchActivity.class);
+        startActivity(openUserSearchIntent);
+    }
+
+    public void openUserSearchQRButton(View view){
+        Intent openUserSearchQRIntent = new Intent(MainActivity.this, userSearchQRGeneratorActivity.class);
+        startActivity(openUserSearchQRIntent);
+    }
+
     public void testButton(View view){
         String qrCodeId = "94385f347527098352e446bdc646e112935aa8ada22c8f93844bc7be1bdc56ff";
         Intent testQRViewerIntent = new Intent(MainActivity.this, QRcodeViewerActivity.class);

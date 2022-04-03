@@ -69,14 +69,15 @@ public class Register extends AppCompatActivity {
 
                 //Check if username is empty
                 if(TextUtils.isEmpty(username)){
-                    Username.setError("Email is required");
+                    Username.setError("Username is required");
                     return;
                 }
                 //Check username for invalid characters
-                if(username.contains("_")){
-                    Username.setError("The character '_' is forbidden. Please pick a new username");
+                if(username.contains("_") || username.contains(" ")){
+                    Username.setError("The characters '_' and ' ' are forbidden. Please pick a new username");
                     return;
                 }
+
 
                 //Add username to Firestore Database
                 DocumentReference docRef = fstore.collection("Users").document(username);
