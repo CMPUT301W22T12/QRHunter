@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.qrhunter">
 
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <uses-feature android:name="android.hardware.camera.any" />
@@ -18,19 +18,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.QRHunter">
         <activity
-            android:name=".LeaderBoardHolder"
+            android:name=".userSearchQRScanActivity"
             android:exported="false" />
         <activity
-            android:name=".LeaderboardAdapter"
+            android:name=".userSearchQRGeneratorActivity"
             android:exported="false" />
         <activity
-            android:name=".LeaderboardHolder"
+            android:name=".userSearchActivity"
             android:exported="false" />
         <activity
-            android:name=".LeaderboardAdapter"
-            android:exported="false" />
-        <activity
-            android:name=".leaderboard"
+            android:name=".userProfileViewerActivity"
             android:exported="false" />
         <activity
             android:name=".QRcodeViewerActivity"
