@@ -3,82 +3,105 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".leaderboardActivity">
 
-    <Button
-        android:id="@+id/sort_by_score"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="40dp"
-        android:onClick="set_rank_highest_score"
-        android:text="Score"
-        app:layout_constraintEnd_toStartOf="@+id/sort_by_top_code"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/relativeLayout"
-        app:layout_constraintTop_toTopOf="parent" />
+    <ScrollView
+        android:id="@+id/leaderboardViewerScrollView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/userPositionText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/leaderboardUserScansButton">
 
-    <Button
-        android:id="@+id/sort_by_top_code"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="40dp"
-        android:onClick="set_rank_highest_code"
-        android:text="Best Score"
-        app:layout_constraintEnd_toStartOf="@+id/sort_by_num_scans"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/sort_by_score"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/sort_by_num_scans"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="40dp"
-        android:text="Scans"
-        android:onClick="set_rank_number_codes_scanned"
-        app:layout_constraintEnd_toStartOf="@+id/relativeLayout"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/sort_by_top_code"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <RelativeLayout
-        android:id="@+id/relativeLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingTop="100dp"
-        tools:context=".LeaderBoard"
-        tools:layout_editor_absoluteX="-88dp"
-        tools:layout_editor_absoluteY="-16dp">
-
-
-        <TextView
-            android:id="@+id/leaderboardRank"
-            android:layout_width="376dp"
-            android:layout_height="wrap_content"
-            android:text="USER RANK BY SCORE: "
-            android:textSize="20dp"/>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/leaderBoardRecycleView"
+        <LinearLayout
+            android:id="@+id/leaderboardViewerLinearLayout"
             android:layout_width="match_parent"
-            android:layout_height="500dp"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="137dp"
-            android:padding="20dp"></androidx.recyclerview.widget.RecyclerView>
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+    </ScrollView>
 
+    <Button
+        android:id="@+id/leaderboardUserScoreButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="4dp"
+        android:onClick="UsersScoreButton"
+        android:text="User Score"
+        app:layout_constraintEnd_toStartOf="@+id/leaderboardUserScansButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/leaderboardUserScansButton" />
 
-    </RelativeLayout>
+    <Button
+        android:id="@+id/leaderboardUserScansButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="4dp"
+        android:onClick="UsersScansButton"
+        android:text="User Scans"
+        app:layout_constraintBottom_toBottomOf="@+id/leaderboardUserScoreButton"
+        app:layout_constraintEnd_toStartOf="@+id/leaderbaordQRScoreButton"
+        app:layout_constraintStart_toEndOf="@+id/leaderboardUserScoreButton"
+        app:layout_constraintTop_toBottomOf="@+id/leaderboardTitleText" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="75dp"
+    <Button
+        android:id="@+id/leaderbaordQRScoreButton"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="16dp"
+        android:onClick="QRScoreButton"
+        android:text="QR Score"
+        app:layout_constraintBottom_toBottomOf="@+id/leaderboardUserScansButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/leaderboardUserScansButton"
+        app:layout_constraintTop_toTopOf="@+id/leaderboardUserScansButton" />
+
+    <TextView
+        android:id="@+id/leaderboardTitleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Leaderboards"
+        android:textAlignment="center"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/userPositionText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent" />
 
-    </LinearLayout>
+    <ImageButton
+        android:id="@+id/leaderboardBackButton"
+        android:layout_width="48dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:onClick="backButtonPressed"
+        app:layout_constraintBottom_toBottomOf="@+id/leaderboardTitleText"
+        app:layout_constraintEnd_toStartOf="@+id/leaderboardTitleText"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="?attr/actionModeCloseDrawable" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

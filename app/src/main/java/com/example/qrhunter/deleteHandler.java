@@ -17,6 +17,7 @@ import com.google.firebase.storage.StorageReference;
 
 import org.w3c.dom.Document;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
 /**
@@ -157,6 +158,7 @@ FirebaseStorage storage;
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 userDoc.update("totalScore", FieldValue.increment(-1*score));
                 userDoc.update("QRcodes", FieldValue.arrayRemove(qrID));
+                userDoc.update("totalScans", FieldValue.increment(-1));
             }
         });
     }

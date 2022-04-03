@@ -118,6 +118,7 @@ public class Register extends AppCompatActivity {
         userInfo.put("Name", playerName);
         userInfo.put("PhoneNum", phoneNum);
         userInfo.put("totalScore", 0);
+        userInfo.put("totalScans", 0);
         userInfo.put("QRcodes", FieldValue.arrayUnion());
         db.collection("Users").document(username).set(userInfo).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override

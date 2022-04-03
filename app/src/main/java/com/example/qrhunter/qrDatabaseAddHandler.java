@@ -143,6 +143,7 @@ public class qrDatabaseAddHandler {
                             if(task.isSuccessful()){
                                 userDoc.update("QRcodes", FieldValue.arrayUnion(shaString));
                                 userDoc.update("totalScore", FieldValue.increment(score));
+                                userDoc.update("totalScans", FieldValue.increment((1)));
                             }
                         }
                     });

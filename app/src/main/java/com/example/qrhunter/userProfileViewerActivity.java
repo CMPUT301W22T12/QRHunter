@@ -65,12 +65,7 @@ boolean admin;
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 String totalScore = String.valueOf(documentSnapshot.get("totalScore"));
                 String username = documentSnapshot.getString("Username");
-                int numScans;
-                if(documentSnapshot.contains("QRCodes")){
-                    numScans = ((List<String>) documentSnapshot.get("QRCodes")).size();
-                }else{
-                    numScans = 0;
-                }
+                String numScans = String.valueOf(documentSnapshot.get("totalScans"));
                 userTitleText.setText(username);
                 userPointsText.setText(username + " has a total score of: " + totalScore);
                 numScansText.setText(username + " has scanned " + numScans + " unique QR Codes");
@@ -96,6 +91,28 @@ boolean admin;
                 .setNegativeButton("No", null)
                 .show();
     }
+
+    public void userScoreLeaderboardButton(View view){
+        Intent userScoreLeaderboardIntent = new Intent(userProfileViewerActivity.this, leaderboardActivity.class);
+        userScoreLeaderboardIntent.putExtra("user", userID);
+        userScoreLeaderboardIntent.putExtra("leaderboard", "userScore");
+        startActivity(userScoreLeaderboardIntent);
+    }
+
+    public void userScansLeaderboardButton(View view){
+        Intent userScoreLeaderboardIntent = new Intent(userProfileViewerActivity.this, leaderboardActivity.class);
+        userScoreLeaderboardIntent.putExtra("user", userID);
+        userScoreLeaderboardIntent.putExtra("leaderboard", "userScans");
+        startActivity(userScoreLeaderboardIntent);
+    }
+
+    public void userQRScoreLeaderboardButton(View view){
+        Intent userScoreLeaderboardIntent = new Intent(userProfileViewerActivity.this, leaderboardActivity.class);
+        userScoreLeaderboardIntent.putExtra("user", userID);
+        userScoreLeaderboardIntent.putExtra("leaderboard", "qrScore");
+        startActivity(userScoreLeaderboardIntent);
+    }
+
 
     public void backButtonPressed(View view){
         onBackPressed();

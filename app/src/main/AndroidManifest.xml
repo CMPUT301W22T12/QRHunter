@@ -18,6 +18,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.QRHunter">
         <activity
+            android:name=".leaderboardActivity"
+            android:exported="false" />
+        <activity
             android:name=".userSearchQRScanActivity"
             android:exported="false" />
         <activity

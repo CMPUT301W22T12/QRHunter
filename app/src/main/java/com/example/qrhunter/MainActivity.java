@@ -56,11 +56,6 @@ public class MainActivity extends AppCompatActivity {
                 new ActivityResultCallback<ActivityResult>() {
                     @Override
                     public void onActivityResult(ActivityResult result) {
-                        if (result.getResultCode() == Activity.RESULT_OK) {
-                            // There are no request codes
-                            Intent data = result.getData();
-                            currentL = data.getDoubleArrayExtra("1");
-                        }
                     }
                 });
     }
@@ -88,13 +83,10 @@ public class MainActivity extends AppCompatActivity {
     public void openMapButton(View view){
         Intent openMapIntent = new Intent(MainActivity.this, MapsActivity.class);
         ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_NETWORK_STATE}, 1);
-        if (currentL != null){
-            openMapIntent.putExtra("1", currentL);
-        } else {
-            locationHandler locationHandler = new locationHandler(this);
-            double[] coords = locationHandler.getCurrentLocation();
-            openMapIntent.putExtra("1", coords);
-        }
+        locationHandler locationHandler = new locationHandler(this);
+        double[] coords = locationHandler.getCurrentLocation();
+        openMapIntent.putExtra("1", coords);
+
 
         openMapActivityResultLauncher.launch(openMapIntent);
     }
@@ -118,6 +110,11 @@ public class MainActivity extends AppCompatActivity {
     public void openUserSearchQRButton(View view){
         Intent openUserSearchQRIntent = new Intent(MainActivity.this, userSearchQRGeneratorActivity.class);
         startActivity(openUserSearchQRIntent);
+    }
+
+    public void openLeaderboardButton(View view){
+        Intent openLeaderboardIntent = new Intent(MainActivity.this, leaderboardActivity.class);
+        startActivity(openLeaderboardIntent);
     }
 
     public void testButton(View view){
