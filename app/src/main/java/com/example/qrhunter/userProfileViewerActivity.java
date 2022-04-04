@@ -100,6 +100,17 @@ boolean admin;
     }
 
     /**
+     * Button function to open the selected user's QR history
+     * @param view standard onclick function parameter
+     */
+    public void userQRHistoryButton(View view) {
+        Intent userQRHistoryIntent =
+                new Intent(userProfileViewerActivity.this, QRHistory.class);
+        userQRHistoryIntent.putExtra("user", userID);
+        startActivity(userQRHistoryIntent);
+    }
+
+    /**
      * Button function to open the selected user's position on the User Score leaderboard
      * @param view standard onclick function parameter
      */
