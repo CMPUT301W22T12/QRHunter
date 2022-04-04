@@ -36,7 +36,7 @@
         android:text="User Score"
         app:layout_constraintEnd_toStartOf="@+id/leaderboardUserScansButton"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/leaderboardUserScansButton" />
+        app:layout_constraintTop_toTopOf="@id/leaderboardUserScansButton" />
 
     <Button
         android:id="@+id/leaderboardUserScansButton"

@@ -160,7 +160,7 @@ public class QRcodeViewerActivity extends AppCompatActivity {
      * Button that allows the user to add a new comment to the currently open QR Code
      * @param view Current View needed for a buttonPress function
      */
-    private void addCommentButton(View view){
+    public void addCommentButton(View view){
         AlertDialog.Builder builder = new AlertDialog.Builder(QRcodeViewerActivity.this);
         LayoutInflater inflater = QRcodeViewerActivity.this.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.add_comment_layout, null);
