@@ -61,12 +61,16 @@ public class MainActivity extends AppCompatActivity {
 
     public void Logout(View view) {
         File userInfo = new File(getFilesDir(), "userInfo");
+        File adminInfo = new File(getFilesDir(), "adminUser");
         new AlertDialog.Builder(this)
                 .setMessage("Are you sure you want to logout?")
                 .setCancelable(false)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         userInfo.delete();
+                        if(adminInfo.exists()){
+                            adminInfo.delete();
+                        }
                         startActivity(new Intent(getApplicationContext(), LoginScreenActivity.class));
                         finish();                    }
                 })
