@@ -48,19 +48,18 @@ public class QRHistory extends AppCompatActivity {
         setContentView(R.layout.activity_qr_history);
 
         Intent intent = getIntent();
-        if (!intent.hasExtra("userID")) {
+        if (!intent.hasExtra("user")) {
             Log.i(TAG, "No Intent Passed");
             finish();
         }
-        userID = intent.getStringExtra("userID");
+        userID = intent.getStringExtra("user");
         docRef = db.collection("Users").document(userID);
 
-        db = FirebaseFirestore.getInstance();
         usersRef = db.collection("Users");
 
-        //historyUserData();
-        //loadUserQrs();
-/*
+        historyUserData();
+        loadUserQrs();
+
         qrHistory = (ListView)findViewById(R.id.qr_history);
 
         //history.add();
@@ -68,7 +67,7 @@ public class QRHistory extends AppCompatActivity {
         qrAdapter = new ArrayAdapter(QRHistory.this,
                 android.R.layout.simple_list_item_1,history);
         qrHistory.setAdapter(qrAdapter);
-*/
+
     }
 
     /**
