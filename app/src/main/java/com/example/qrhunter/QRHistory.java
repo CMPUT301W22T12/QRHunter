@@ -26,9 +26,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class QRHistory extends AppCompatActivity {
-    CollectionReference usersRef;
     boolean myHistory;
-    String userID; //USE THIS SHIT
+    String userID;
     FirebaseFirestore db; //!!
     DocumentReference docRef; //!!
     ScoringHandler scoringHandler = new ScoringHandler(); //call scoringHandler class
@@ -72,11 +71,6 @@ public class QRHistory extends AppCompatActivity {
 
         historyUserData();
 
-//        qrHistory = (ListView)findViewById(R.id.qr_history);
-//
-//        qrAdapter = new ArrayAdapter(QRHistory.this,
-//                android.R.layout.simple_list_item_1,history);
-//        qrHistory.setAdapter(qrAdapter);
     }
 
     /**
@@ -100,9 +94,9 @@ public class QRHistory extends AppCompatActivity {
     }
 
     /**
-     * The builder function for the leaderboard. Will put a provided document into the leaderboard scroll view using the provided information
-     * @param ID The ID of the document being added, either username or QR hash
-     * @param score The score for the given leaderboard, either totalScore, totalScans or a QR's Score
+     * The builder function for the qr history. Will put a provided document into the qr history scroll view using the provided information
+     * @param ID The ID of the document being added
+     * @param score The score for the given qr code
      */
     private void addDocumentToScrollView(String ID, String score){
         LinearLayout documentLayout = new LinearLayout(QRHistory.this);
@@ -163,7 +157,7 @@ public class QRHistory extends AppCompatActivity {
     }
 
     /**
-     * This functions loads an array of the selected user's QR codes to be used in comparison
+     * This functions loads an array of the selected user's QR codes to be used in iteration
      */
     private void loadUserQrs(){
         historyLinearLayout.removeAllViewsInLayout();
