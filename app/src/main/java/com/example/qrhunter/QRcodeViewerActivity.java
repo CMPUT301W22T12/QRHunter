@@ -28,6 +28,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -67,6 +68,16 @@ public class QRcodeViewerActivity extends AppCompatActivity {
             ImageButton deleteButton = findViewById(R.id.qrCodeViewerDeleteButton);
             deleteButton.setVisibility(View.VISIBLE);
         }
+        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if(documentSnapshot.contains("Location")) {
+                    ImageButton mapButton = findViewById(R.id.qrViewerMapButton);
+                    mapButton.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
         fillOutQRInfo();
     }
 
@@ -230,6 +241,29 @@ public class QRcodeViewerActivity extends AppCompatActivity {
         commentLayout.addView(commentText);
         return commentLayout;
     }
+
+    /**
+     * Button to open the current QR code in the map. Only available if the QR has a location
+     * @param view standard onClick function parameter
+     */
+    public void qrMapButton(View view){
+        Intent mapIntent = new Intent(QRcodeViewerActivity.this, MapsActivity.class);
+        locationHandler locHandler = new locationHandler(this);
+        double[] myloc = locHandler.getCurrentLocation();
+        double[] coords = new double[4];
+        coords[0] = myloc[0]; coords[1] = myloc[1];
+        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                GeoPoint geoPoint = documentSnapshot.getGeoPoint("Location");
+                coords[2] = geoPoint.getLatitude();
+                coords[3] = geoPoint.getLongitude();
+                mapIntent.putExtra("1", coords);
+                startActivity(mapIntent);
+            }
+        });
+    }
+
 
     /**
      * Button to delete the currently open QR Code. Only accessible by admin accounts
