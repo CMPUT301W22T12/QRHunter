@@ -150,7 +150,9 @@ public class QRHistory extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     //Delete this code from user
-                    finish();
+                    deleteHandler deleter = new deleteHandler(db);
+                    deleter.removeQRfromUser(userID, Integer.valueOf(score), ID);
+                    loadUserQrs();
                 }
             });
             documentLayout.addView(deleteButton);
@@ -164,6 +166,7 @@ public class QRHistory extends AppCompatActivity {
      * This functions loads an array of the selected user's QR codes to be used in comparison
      */
     private void loadUserQrs(){
+        historyLinearLayout.removeAllViewsInLayout();
         db.collection("Users").document(userID).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {

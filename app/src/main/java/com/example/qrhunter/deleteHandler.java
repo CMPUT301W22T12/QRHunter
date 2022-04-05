@@ -161,7 +161,7 @@ FirebaseStorage storage;
      * @param score Score of the QR Code
      * @param qrID ID of the QR code
      */
-    private void removeQRfromUser(String userId, int score, String qrID){
+    public void removeQRfromUser(String userId, int score, String qrID){
         DocumentReference userDoc = db.collection("Users").document(userId);
         userDoc.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
