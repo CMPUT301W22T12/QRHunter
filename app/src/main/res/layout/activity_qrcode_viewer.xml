@@ -135,4 +135,16 @@
         app:layout_constraintStart_toEndOf="@+id/qrCodeViewerTitleText"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:drawable/ic_menu_delete" />
+
+    <ImageButton
+        android:id="@+id/qrViewerMapButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:onClick="qrMapButton"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="@+id/qrCodeViewerDeleteButton"
+        app:layout_constraintStart_toStartOf="@+id/qrCodeViewerDeleteButton"
+        app:layout_constraintTop_toBottomOf="@+id/qrCodeViewerDeleteButton"
+        app:srcCompat="@android:drawable/ic_dialog_map" />
 </androidx.constraintlayout.widget.ConstraintLayout>

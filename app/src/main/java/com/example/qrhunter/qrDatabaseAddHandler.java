@@ -47,6 +47,10 @@ public class qrDatabaseAddHandler {
         username = userHand.getUsername(context);
     }
 
+    public qrDatabaseAddHandler(String username){
+        this.username = username;
+    }
+
     /**
      * Adds a provided image to the Firebase Storage location with all required information
      * @param shaString String with the relevant QR Codes hash id
