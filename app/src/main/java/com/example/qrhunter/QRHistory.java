@@ -3,19 +3,15 @@ package com.example.qrhunter;
 import static android.content.ContentValues.TAG;
 
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -25,40 +21,42 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import org.w3c.dom.Document;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
-
 
 public class QRHistory extends AppCompatActivity {
     CollectionReference usersRef;
-    ArrayList<String> userQRCodes;
-    boolean myHistory = false;
+    boolean myHistory;
     String userID; //USE THIS SHIT
     FirebaseFirestore db; //!!
     DocumentReference docRef; //!!
     ScoringHandler scoringHandler = new ScoringHandler(); //call scoringHandler class
     LinearLayout historyLinearLayout;
-
     ArrayList<String> userQRs;
 
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qr_history);
         db = FirebaseFirestore.getInstance();
-        historyLinearLayout = findViewById(R.id.historyLinearLayout);
-        historyLinearLayout.setVisibility(View.VISIBLE);
+        historyLinearLayout = findViewById(R.id.historyViewerLinearLayout);
+        myHistory = false;
 
         Intent intent = getIntent();
-        if (!intent.hasExtra("user")) {
-            Log.i(TAG, "No Intent Passed");
-            finish();
+        if(intent.hasExtra("user")){
+            userID = intent.getStringExtra("user");
+        }else{
+            userHandler userHandle = new userHandler();
+            try {
+                userID = userHandle.getUsername(this);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-        userID = intent.getStringExtra("user");
+        loadUserQrs();
+
         docRef = db.collection("Users").document(userID);
 
         userHandler usrHandle = new userHandler();
@@ -72,22 +70,13 @@ public class QRHistory extends AppCompatActivity {
         }
 
 
-        //usersRef = db.collection("Users");
         historyUserData();
-        loadUserQrs();
-
-        if(userQRs != null) {
-            for (String id : userQRs) {
-                addDocumentToScrollView(id, String.valueOf(scoringHandler.hexStringReader(id)));
-            }
-        }
 
 //        qrHistory = (ListView)findViewById(R.id.qr_history);
 //
 //        qrAdapter = new ArrayAdapter(QRHistory.this,
 //                android.R.layout.simple_list_item_1,history);
 //        qrHistory.setAdapter(qrAdapter);
-
     }
 
     /**
@@ -110,40 +99,26 @@ public class QRHistory extends AppCompatActivity {
         });
     }
 
-    public void getUserQrCodesId() {
-        db.collection("Users").document(userID).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if(documentSnapshot.contains("QRcodes")) {
-                    userQRCodes = (ArrayList<String>) documentSnapshot.get("QRcodes");
-                }else{
-                    userQRCodes = null;
-                }
-            }
-        });
-    }
-
     /**
      * The builder function for the leaderboard. Will put a provided document into the leaderboard scroll view using the provided information
      * @param ID The ID of the document being added, either username or QR hash
      * @param score The score for the given leaderboard, either totalScore, totalScans or a QR's Score
      */
     private void addDocumentToScrollView(String ID, String score){
-
         LinearLayout documentLayout = new LinearLayout(QRHistory.this);
         documentLayout.setOrientation(LinearLayout.HORIZONTAL);
 
         //Button for opening the document's page
         ImageButton viewButton = new ImageButton(this);
-        viewButton.setImageResource(android.R.drawable.ic_menu_delete);
+        viewButton.setImageResource(android.R.drawable.ic_menu_search);
         viewButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Delete this code from user
-                finish();
+                Intent QROpenIntent = new Intent(QRHistory.this, QRcodeViewerActivity.class);
+                QROpenIntent.putExtra("QRcode", ID);
+                startActivity(QROpenIntent);
             }
         });
-
 
         //Text to show the documents id
         TextView IDtext = new TextView(this);
@@ -158,13 +133,27 @@ public class QRHistory extends AppCompatActivity {
         scoreText.setText("Score: " + score);
         scoreText.setTextSize(16);
         scoreText.setGravity(Gravity.CENTER_VERTICAL);
-        scoreText.setPadding(10, 0, 0, 0);
+        scoreText.setPadding(10, 0, 0, 20);
 
         //Add the views to the horizontal layout
-        documentLayout.addView(IDtext);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1f);
+        documentLayout.addView(IDtext, params);
         documentLayout.addView(scoreText);
+        documentLayout.addView(viewButton);
+
+
         if(myHistory) {
-            documentLayout.addView(viewButton);
+            //Button for opening the document's page
+            ImageButton deleteButton = new ImageButton(this);
+            deleteButton.setImageResource(android.R.drawable.ic_menu_delete);
+            deleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //Delete this code from user
+                    finish();
+                }
+            });
+            documentLayout.addView(deleteButton);
         }
 
         //add the horizontal layout to the scrollview's linear layout
@@ -175,11 +164,14 @@ public class QRHistory extends AppCompatActivity {
      * This functions loads an array of the selected user's QR codes to be used in comparison
      */
     private void loadUserQrs(){
-        db.collection("Users").document("jlatta2").get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        db.collection("Users").document(userID).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 if(documentSnapshot.contains("QRcodes")) {
                     userQRs = (ArrayList<String>) documentSnapshot.get("QRcodes");
+                    for (String id : userQRs) {
+                        addDocumentToScrollView(id, String.valueOf(scoringHandler.hexStringReader(id)));
+                    }
                 }else{
                     userQRs = null;
                 }
