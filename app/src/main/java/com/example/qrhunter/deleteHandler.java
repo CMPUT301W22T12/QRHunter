@@ -49,16 +49,22 @@ FirebaseStorage storage;
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 int score = Integer.parseInt(String.valueOf(documentSnapshot.get("Score")));
                 List<String> commentList = (List<String>) documentSnapshot.get("Comments");
-                for(String commentId : commentList){
-                    deleteComment(commentId);
+                if(commentList != null) {
+                    for (String commentId : commentList) {
+                        deleteComment(commentId);
+                    }
                 }
                 List<String> imageList = (List<String>) documentSnapshot.get("Images");
-                for(String imageLocation : imageList){
-                    deleteImage(imageLocation);
+                if(imageList != null) {
+                    for (String imageLocation : imageList) {
+                        deleteImage(imageLocation);
+                    }
                 }
                 List<String> usersList = (List<String>) documentSnapshot.get("Users");
-                for(String user : usersList){
-                    removeQRfromUser(user, score, qrID);
+                if(usersList != null) {
+                    for (String user : usersList) {
+                        removeQRfromUser(user, score, qrID);
+                    }
                 }
                 docRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -113,7 +119,7 @@ FirebaseStorage storage;
      * Deletes a comment from the database
      * @param commentId database ID of the comment
      */
-    private void deleteComment(String commentId){
+    public void deleteComment(String commentId){
         db.collection("Comments").document(commentId)
                 .delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
