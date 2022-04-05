@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -181,17 +181,33 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#deleteComment(java.lang.String)">deleteComment</a></span>&#8203;(java.lang.String&nbsp;commentId)</code></th>
+<td class="colLast">
+<div class="block">Deletes a comment from the database</div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#deleteQRcode(java.lang.String)">deleteQRcode</a></span>&#8203;(java.lang.String&nbsp;qrID)</code></th>
 <td class="colLast">
 <div class="block">Delete the provided QR Code from the Database
  Also deletes all associated images, comments and removes reference to the code from every user that has scanned it</div>
 </td>
 </tr>
-<tr id="i1" class="rowColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#deleteUser(java.lang.String)">deleteUser</a></span>&#8203;(java.lang.String&nbsp;userID)</code></th>
 <td class="colLast">
 <div class="block">Function to delete a user from the database along with all associated comments</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeQRfromUser(java.lang.String,int,java.lang.String)">removeQRfromUser</a></span>&#8203;(java.lang.String&nbsp;userId,
+                int&nbsp;score,
+                java.lang.String&nbsp;qrID)</code></th>
+<td class="colLast">
+<div class="block">Remove reference of a QR code from a given user.</div>
 </td>
 </tr>
 </table>
@@ -265,7 +281,7 @@ extends java.lang.Object</pre>
 <a id="deleteUser(java.lang.String)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>deleteUser</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;deleteUser&#8203;(java.lang.String&nbsp;userID)</pre>
@@ -273,6 +289,38 @@ extends java.lang.Object</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>userID</code> - ID of the user to be removed</dd>
+</dl>
+</li>
+</ul>
+<a id="deleteComment(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>deleteComment</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;deleteComment&#8203;(java.lang.String&nbsp;commentId)</pre>
+<div class="block">Deletes a comment from the database</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>commentId</code> - database ID of the comment</dd>
+</dl>
+</li>
+</ul>
+<a id="removeQRfromUser(java.lang.String,int,java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>removeQRfromUser</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;removeQRfromUser&#8203;(java.lang.String&nbsp;userId,
+                             int&nbsp;score,
+                             java.lang.String&nbsp;qrID)</pre>
+<div class="block">Remove reference of a QR code from a given user. Deletes the code and reduces the users score.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>userId</code> - ID of the user</dd>
+<dd><code>score</code> - Score of the QR Code</dd>
+<dd><code>qrID</code> - ID of the QR code</dd>
 </dl>
 </li>
 </ul>

@@ -25,6 +25,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * This activity is used to display a selected users history of QR codes.
+ * If viewing your own activity it allows the user to remove QR codes from their account
+ */
 public class QRHistory extends AppCompatActivity {
     boolean myHistory;
     String userID;

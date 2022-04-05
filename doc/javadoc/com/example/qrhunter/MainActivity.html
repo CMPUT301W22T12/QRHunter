@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -175,6 +175,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <hr>
 <pre>public class <span class="typeNameLabel">MainActivity</span>
 extends androidx.appcompat.app.AppCompatActivity</pre>
+<div class="block">Main Menu Activity, contains buttons to navigate to various sections of the app</div>
 </li>
 </ul>
 </div>
@@ -267,17 +268,23 @@ extends androidx.appcompat.app.AppCompatActivity</pre>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#exitButton(android.view.View)">exitButton</a></span>&#8203;(android.view.View&nbsp;view)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Exits the application</div>
+</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#InitMap()">InitMap</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Function for initializing the Map Activity</div>
+</td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#Logout(android.view.View)">Logout</a></span>&#8203;(android.view.View&nbsp;view)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Logs current user out of the application, returns to login screen</div>
+</td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>void</code></td>
@@ -292,42 +299,51 @@ extends androidx.appcompat.app.AppCompatActivity</pre>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#openLeaderboardButton(android.view.View)">openLeaderboardButton</a></span>&#8203;(android.view.View&nbsp;view)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Opens up the leaderboard activity</div>
+</td>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#openLoginQRButton(android.view.View)">openLoginQRButton</a></span>&#8203;(android.view.View&nbsp;view)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Opens up an activity that displays the QR code used to login</div>
+</td>
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#openMapButton(android.view.View)">openMapButton</a></span>&#8203;(android.view.View&nbsp;view)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Opens the map activity to view nearby QR Codes</div>
+</td>
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#openUserProfileButton(android.view.View)">openUserProfileButton</a></span>&#8203;(android.view.View&nbsp;view)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Opens up the user profile activity</div>
+</td>
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#openUserSearchButton(android.view.View)">openUserSearchButton</a></span>&#8203;(android.view.View&nbsp;view)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Opens up the user search menu</div>
+</td>
 </tr>
 <tr id="i10" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#openUserSearchQRButton(android.view.View)">openUserSearchQRButton</a></span>&#8203;(android.view.View&nbsp;view)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Opens up an activity that displays the QR code used to search for your profile</div>
+</td>
 </tr>
 <tr id="i11" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#scanNewCodeButton(android.view.View)">scanNewCodeButton</a></span>&#8203;(android.view.View&nbsp;view)</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr id="i12" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#testButton(android.view.View)">testButton</a></span>&#8203;(android.view.View&nbsp;view)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Opens up the camera to scan a new QR Code</div>
+</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -455,6 +471,7 @@ extends androidx.appcompat.app.AppCompatActivity</pre>
 <li class="blockList">
 <h4>InitMap</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;InitMap()</pre>
+<div class="block">Function for initializing the Map Activity</div>
 </li>
 </ul>
 <a id="Logout(android.view.View)">
@@ -464,6 +481,11 @@ extends androidx.appcompat.app.AppCompatActivity</pre>
 <li class="blockList">
 <h4>Logout</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;Logout&#8203;(android.view.View&nbsp;view)</pre>
+<div class="block">Logs current user out of the application, returns to login screen</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>view</code> - standard button onClick argument</dd>
+</dl>
 </li>
 </ul>
 <a id="scanNewCodeButton(android.view.View)">
@@ -473,6 +495,11 @@ extends androidx.appcompat.app.AppCompatActivity</pre>
 <li class="blockList">
 <h4>scanNewCodeButton</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;scanNewCodeButton&#8203;(android.view.View&nbsp;view)</pre>
+<div class="block">Opens up the camera to scan a new QR Code</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>view</code> - standard button onClick argument</dd>
+</dl>
 </li>
 </ul>
 <a id="openMapButton(android.view.View)">
@@ -482,6 +509,11 @@ extends androidx.appcompat.app.AppCompatActivity</pre>
 <li class="blockList">
 <h4>openMapButton</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;openMapButton&#8203;(android.view.View&nbsp;view)</pre>
+<div class="block">Opens the map activity to view nearby QR Codes</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>view</code> - standard button onClick argument</dd>
+</dl>
 </li>
 </ul>
 <a id="openLoginQRButton(android.view.View)">
@@ -491,6 +523,11 @@ extends androidx.appcompat.app.AppCompatActivity</pre>
 <li class="blockList">
 <h4>openLoginQRButton</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;openLoginQRButton&#8203;(android.view.View&nbsp;view)</pre>
+<div class="block">Opens up an activity that displays the QR code used to login</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>view</code> - standard button onClick argument</dd>
+</dl>
 </li>
 </ul>
 <a id="openUserProfileButton(android.view.View)">
@@ -500,6 +537,11 @@ extends androidx.appcompat.app.AppCompatActivity</pre>
 <li class="blockList">
 <h4>openUserProfileButton</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;openUserProfileButton&#8203;(android.view.View&nbsp;view)</pre>
+<div class="block">Opens up the user profile activity</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>view</code> - standard button onClick argument</dd>
+</dl>
 </li>
 </ul>
 <a id="openUserSearchButton(android.view.View)">
@@ -509,6 +551,11 @@ extends androidx.appcompat.app.AppCompatActivity</pre>
 <li class="blockList">
 <h4>openUserSearchButton</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;openUserSearchButton&#8203;(android.view.View&nbsp;view)</pre>
+<div class="block">Opens up the user search menu</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>view</code> - standard button onClick argument</dd>
+</dl>
 </li>
 </ul>
 <a id="openUserSearchQRButton(android.view.View)">
@@ -518,6 +565,11 @@ extends androidx.appcompat.app.AppCompatActivity</pre>
 <li class="blockList">
 <h4>openUserSearchQRButton</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;openUserSearchQRButton&#8203;(android.view.View&nbsp;view)</pre>
+<div class="block">Opens up an activity that displays the QR code used to search for your profile</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>view</code> - standard button onClick argument</dd>
+</dl>
 </li>
 </ul>
 <a id="openLeaderboardButton(android.view.View)">
@@ -527,15 +579,11 @@ extends androidx.appcompat.app.AppCompatActivity</pre>
 <li class="blockList">
 <h4>openLeaderboardButton</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;openLeaderboardButton&#8203;(android.view.View&nbsp;view)</pre>
-</li>
-</ul>
-<a id="testButton(android.view.View)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>testButton</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;testButton&#8203;(android.view.View&nbsp;view)</pre>
+<div class="block">Opens up the leaderboard activity</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>view</code> - standard button onClick argument</dd>
+</dl>
 </li>
 </ul>
 <a id="exitButton(android.view.View)">
@@ -545,6 +593,11 @@ extends androidx.appcompat.app.AppCompatActivity</pre>
 <li class="blockList">
 <h4>exitButton</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;exitButton&#8203;(android.view.View&nbsp;view)</pre>
+<div class="block">Exits the application</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>view</code> - standard button onClick argument</dd>
+</dl>
 </li>
 </ul>
 <a id="onBackPressed()">

@@ -22,6 +22,9 @@ import android.view.View;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * Main Menu Activity, contains buttons to navigate to various sections of the app
+ */
 public class MainActivity extends AppCompatActivity {
     String username;
     ActivityResultLauncher<Intent> openMapActivityResultLauncher;
@@ -49,6 +52,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Function for initializing the Map Activity
+     */
     public void InitMap(){
         openMapActivityResultLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
@@ -59,6 +65,10 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
+    /**
+     * Logs current user out of the application, returns to login screen
+     * @param view standard button onClick argument
+     */
     public void Logout(View view) {
         File userInfo = new File(getFilesDir(), "userInfo");
         File adminInfo = new File(getFilesDir(), "adminUser");
@@ -78,11 +88,19 @@ public class MainActivity extends AppCompatActivity {
                 .show();
     }
 
+    /**
+     * Opens up the camera to scan a new QR Code
+     * @param view standard button onClick argument
+     */
     public void scanNewCodeButton(View view){
         Intent scanNewCodeIntent = new Intent(MainActivity.this, qrScanCameraActivity.class);
         startActivity(scanNewCodeIntent);
     }
 
+    /**
+     * Opens the map activity to view nearby QR Codes
+     * @param view standard button onClick argument
+     */
     public void openMapButton(View view){
         Intent openMapIntent = new Intent(MainActivity.this, MapsActivity.class);
         ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_NETWORK_STATE}, 1);
@@ -92,39 +110,56 @@ public class MainActivity extends AppCompatActivity {
         openMapActivityResultLauncher.launch(openMapIntent);
     }
 
+    /**
+     * Opens up an activity that displays the QR code used to login
+     * @param view standard button onClick argument
+     */
     public void openLoginQRButton(View view){
         Intent openLoginQRIntent = new Intent(MainActivity.this, loginQRCodeGeneratorActivity.class);
         startActivity(openLoginQRIntent);
     }
 
+    /**
+     * Opens up the user profile activity
+     * @param view standard button onClick argument
+     */
     public void openUserProfileButton(View view){
         Intent openProfileIntent = new Intent(MainActivity.this, userProfileViewerActivity.class);
         openProfileIntent.putExtra("userID", username);
         startActivity(openProfileIntent);
     }
 
+    /**
+     * Opens up the user search menu
+     * @param view standard button onClick argument
+     */
     public void openUserSearchButton(View view){
         Intent openUserSearchIntent = new Intent(MainActivity.this, userSearchActivity.class);
         startActivity(openUserSearchIntent);
     }
 
+    /**
+     * Opens up an activity that displays the QR code used to search for your profile
+     * @param view standard button onClick argument
+     */
     public void openUserSearchQRButton(View view){
         Intent openUserSearchQRIntent = new Intent(MainActivity.this, userSearchQRGeneratorActivity.class);
         startActivity(openUserSearchQRIntent);
     }
 
+    /**
+     * Opens up the leaderboard activity
+     * @param view standard button onClick argument
+     */
     public void openLeaderboardButton(View view){
         Intent openLeaderboardIntent = new Intent(MainActivity.this, leaderboardActivity.class);
         startActivity(openLeaderboardIntent);
     }
 
-    public void testButton(View view){
-        String qrCodeId = "94385f347527098352e446bdc646e112935aa8ada22c8f93844bc7be1bdc56ff";
-        Intent testQRViewerIntent = new Intent(MainActivity.this, QRcodeViewerActivity.class);
-        testQRViewerIntent.putExtra("QRcode", qrCodeId);
-        startActivity(testQRViewerIntent);
-    }
-
+    /**
+     * Exits the application
+     * @param view standard button onClick argument
+     */
     public void exitButton(View view){
         onBackPressed();
     }
