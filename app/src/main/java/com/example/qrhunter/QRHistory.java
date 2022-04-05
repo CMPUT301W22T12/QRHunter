@@ -20,6 +20,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import org.w3c.dom.Document;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +32,7 @@ public class QRHistory extends AppCompatActivity {
     ArrayAdapter qrAdapter;
     CollectionReference usersRef;
     String username;
-    ArrayList<String> userQRs;
+    ArrayList<String> userQRCodes;
     boolean admin;
 
     String userID; //USE THIS SHIT
@@ -58,11 +60,13 @@ public class QRHistory extends AppCompatActivity {
         usersRef = db.collection("Users");
 
         historyUserData();
-        loadUserQrs();
+        getUserQrCodesId();
+
+        for (String id:userQRCodes) {
+            history.add(id + scoringHandler.hexStringReader(id));
+        }
 
         qrHistory = (ListView)findViewById(R.id.qr_history);
-
-        //history.add();
 
         qrAdapter = new ArrayAdapter(QRHistory.this,
                 android.R.layout.simple_list_item_1,history);
@@ -75,8 +79,8 @@ public class QRHistory extends AppCompatActivity {
      */
     private void historyUserData(){
         TextView historyUserName = findViewById(R.id.qr_history_user);
-        TextView historyTotalPoints = findViewById(R.id.history_qr_scanned);
-        TextView historyQRScanned = findViewById(R.id.history_total_score);
+        TextView historyQRScanned = findViewById(R.id.history_qr_scanned);
+        TextView historyTotalPoints = findViewById(R.id.history_total_score);
         docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -85,56 +89,18 @@ public class QRHistory extends AppCompatActivity {
                 String numScans = String.valueOf(documentSnapshot.get("totalScans"));
                 historyUserName.setText(username);
                 historyTotalPoints.setText("Total score: " + totalScore);
-                historyQRScanned.setText("Number of QR codes scanned" + numScans);
+                historyQRScanned.setText("Number of QR codes scanned: " + numScans);
             }
         });
     }
 
-    public void loadUserQrs(){
-        db.collection("Users").document(username).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+    public void getUserQrCodesId() {
+        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if(documentSnapshot.contains("QRcodes")) {
-                    history = (ArrayList) documentSnapshot.get("QRcodes");
-                }else{
-                    history = null;
-                }
+                userQRCodes = (ArrayList<String>) documentSnapshot.get("QRcodes");
             }
         });
-    }
-
-    /**
-     * Adding a QRCode to history with sha256 string as input
-     * Also updates the amount of qr codes scanned and the total score of the user
-     */
-    public void addToHistory(String str) {
-        history.add(str + scoringHandler.hexStringReader(str));
-        qrAmount += 1;
-        totalScore += getQRscore(str);
-    }
-
-    /**
-     * Removing a QRCode to history with sha256 string as input
-     * Also updates the amount of qr codes scanned and the total score of the user
-     */
-    public void removeFromHistory(String str) {
-        history.remove(str + scoringHandler.hexStringReader(str));
-        qrAmount -= 1;
-        totalScore -= getQRscore(str);
-    }
-
-    /**
-     * Returns the array list size
-     */
-    public void qrAmount() {
-        qrAmount = history.size();
-    }
-
-    /**
-     * Calls hexStringReader from the ScoringHandler class to
-     */
-    public int getQRscore(String str) {
-        return scoringHandler.hexStringReader(str);
     }
 
 }
