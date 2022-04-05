@@ -7,9 +7,7 @@ import java.security.MessageDigest;
  */
 public class ScoringHandler {
 
-    public ScoringHandler() {
-
-    }
+    public ScoringHandler() {}
 
     /**
      * Calculates the score of provided character and number of repititions

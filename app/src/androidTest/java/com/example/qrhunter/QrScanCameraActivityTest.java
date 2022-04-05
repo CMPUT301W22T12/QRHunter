@@ -2,7 +2,6 @@ package com.example.qrhunter;
 
 import android.app.Activity;
 import android.view.View;
-
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 import com.robotium.solo.Solo;
@@ -11,7 +10,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class MapActivityTest {
+public class QrScanCameraActivityTest {
 
     private View view;
     private Solo solo;
@@ -33,15 +32,19 @@ public class MapActivityTest {
     }
 
     @Test
-    public void checkMapOpen(){
+    public void checkUserProfileViewerOpen(){
         solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
-        view = solo.getView(R.id.MainMenuMapButton);
+        view = solo.getView(R.id.MainMenuScanQRButton);
         solo.clickOnView(view);
-        solo.assertCurrentActivity("Wrong Activity", MapsActivity.class);
+        solo.sleep(1000);
+        solo.assertCurrentActivity("Wrong Activity", qrScanCameraActivity.class);
+        solo.goBack();
+        solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
     }
 
     @After
     public void tearDown() throws Exception{
         solo.finishOpenedActivities();
     }
+
 }

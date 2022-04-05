@@ -89,8 +89,6 @@ public class MainActivity extends AppCompatActivity {
         locationHandler locationHandler = new locationHandler(this);
         double[] coords = locationHandler.getCurrentLocation();
         openMapIntent.putExtra("1", coords);
-
-
         openMapActivityResultLauncher.launch(openMapIntent);
     }
 
