@@ -17,6 +17,7 @@
         <entry key="..\:/Users/Jadon/AndroidStudioProjects/QRHunterApp/app/src/main/res/layout/activity_main.xml" value="0.4192708333333333" />
         <entry key="..\:/Users/Jadon/AndroidStudioProjects/QRHunterApp/app/src/main/res/layout/activity_maps.xml" value="0.3875" />
         <entry key="..\:/Users/Jadon/AndroidStudioProjects/QRHunterApp/app/src/main/res/layout/activity_qr_add_object_picture.xml" value="0.4192708333333333" />
+        <entry key="..\:/Users/Jadon/AndroidStudioProjects/QRHunterApp/app/src/main/res/layout/activity_qr_history.xml" value="0.3796875" />
         <entry key="..\:/Users/Jadon/AndroidStudioProjects/QRHunterApp/app/src/main/res/layout/activity_qr_scanned_get_info.xml" value="0.67" />
         <entry key="..\:/Users/Jadon/AndroidStudioProjects/QRHunterApp/app/src/main/res/layout/activity_qrcode_viewer.xml" value="0.5" />
         <entry key="..\:/Users/Jadon/AndroidStudioProjects/QRHunterApp/app/src/main/res/layout/activity_register.xml" value="0.4192708333333333" />
@@ -28,12 +29,6 @@
         <entry key="..\:/Users/Jadon/AndroidStudioProjects/QRHunterApp/app/src/main/res/layout/testing_layout.xml" value="0.5" />
         <entry key="..\:/Users/Jadon/AndroidStudioProjects/QRHunterApp/app/src/main/res/layout/user_search_layout.xml" value="0.3875" />
         <entry key="..\:/Users/loyforyou/Desktop/loy/QRHunter/app/src/main/res/layout/activity_maps.xml" value="0.24895833333333334" />
-        <entry key="..\:/Users/loyforyou/Desktop/main/QRHunter/app/src/main/res/layout/activity_leaderboard.xml" value="0.264" />
-        <entry key="..\:/Users/loyforyou/Desktop/main/QRHunter/app/src/main/res/layout/activity_login_qrcode.xml" value="0.24947916666666667" />
-        <entry key="..\:/Users/loyforyou/Desktop/main/QRHunter/app/src/main/res/layout/activity_main.xml" value="0.4" />
-        <entry key="..\:/Users/loyforyou/Desktop/main/QRHunter/app/src/main/res/layout/activity_user_profile_viewer.xml" value="0.24947916666666667" />
-        <entry key="..\:/Users/loyforyou/Desktop/main/QRHunter/app/src/main/res/layout/activity_user_search.xml" value="0.2" />
-        <entry key="..\:/Users/loyforyou/Desktop/main/QRHunter/app/src/main/res/layout/leaderboardreceycleview.xml" value="0.264" />
       </map>
     </option>
   </component>
